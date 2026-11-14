@@ -198,7 +198,7 @@ export default function Header() {
               <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
             </div>
 
-            {/* Mobile Hamburger Button */}
+            {/* Mobile Menu Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="md:hidden p-2 text-gray-700 hover:bg-gray-100 rounded-lg cursor-pointer"

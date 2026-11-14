@@ -366,7 +366,7 @@ export default function AccountPage() {
                     </div>
                     <h4 className="text-xs font-black text-gray-900">Quà Sinh Nhật</h4>
                     <p className="text-[11px] text-gray-600 leading-relaxed">
-                      Tặng ngay Combo Burger + Pepsi miễn phí trong tuần lễ sinh nhật của bạn.
+                      Tặng ngay Combo Gà Pop + Pepsi miễn phí trong tuần lễ sinh nhật của bạn.
                     </p>
                   </div>
 

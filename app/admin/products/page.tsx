@@ -460,7 +460,7 @@ export default function AdminProductsPage() {
                     type="text"
                     value={shortDescription}
                     onChange={(e) => setShortDescription(e.target.value)}
-                    placeholder="Burger kẹp thịt bò nướng thơm lừng..."
+                    placeholder="Gà rán pop giòn rụm đượm sốt..."
                     className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs focus:bg-white focus:border-primary"
                   />
                 </div>

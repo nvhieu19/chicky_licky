@@ -79,16 +79,16 @@ export default async function OrderDetailPage({ params, searchParams }: Props) {
         items: [
           {
             id: "i1",
-            productName: "Combo Ria's Lunch Burger 42K",
-            productImage: "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?auto=format&fit=crop&w=400&q=80",
+            productName: "Combo Gà Pop Tok 42K",
+            productImage: "https://images.unsplash.com/photo-1569058242253-92a9c755a0ec?auto=format&fit=crop&w=400&q=80",
             unitPrice: 42000,
             quantity: 1,
             subtotal: 42000,
           },
           {
             id: "i2",
-            productName: "Burger Bò Nướng Bulgogi",
-            productImage: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=400&q=80",
+            productName: "Gà Rán Pop Sốt Cay Ngọt",
+            productImage: "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&w=400&q=80",
             unitPrice: 49000,
             quantity: 1,
             subtotal: 49000,

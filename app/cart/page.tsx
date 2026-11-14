@@ -86,7 +86,7 @@ export default function CartPage() {
             Giỏ hàng của bạn đang trống!
           </h2>
           <p className="text-xs text-gray-500 mt-2 mb-8 leading-relaxed">
-            Hãy khám phá ngay những món gà rán giòn rụm, burger bò thơm ngon và combo ăn trưa giá cực sốc tại Chicky Licky nhé.
+            Hãy khám phá ngay những món gà rán pop giòn rụm, cơm gà nóng hổi và combo gà đượm sốt giá cực sốc tại Chicky Licky nhé.
           </p>
           <Link
             href="/menu"

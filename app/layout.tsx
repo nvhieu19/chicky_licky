@@ -7,9 +7,9 @@ import Footer from "@/components/footer/Footer";
 import AuthModal from "@/components/auth/AuthModal";
 
 export const metadata: Metadata = {
-  title: "Chicky Licky - Gà Giòn Chuẩn Vị | Fast Food & Burger",
+  title: "Chicky Licky - Gà Giòn Chuẩn Vị | Fast Food & Chicken",
   description:
-    "Thưởng thức gà rán giòn rụm, burger bò nướng thơm ngon, combo ăn trưa chỉ từ 42K cùng hàng ngàn ưu đãi hấp dẫn tại Chicky Licky. Giao hàng tận nơi nhanh chóng!",
+    "Thưởng thức gà rán pop giòn rụm, cơm gà đượm sốt, combo ăn trưa chỉ từ 42K cùng hàng ngàn ưu đãi hấp dẫn tại Chicky Licky. Giao hàng tận nơi nhanh chóng!",
 };
 
 export default function RootLayout({

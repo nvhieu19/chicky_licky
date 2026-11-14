@@ -17,7 +17,7 @@ const fallbackPromos = [
     title: "Ria's Lunch Ăn Trưa Giá Sốc 42K - 49K",
     slug: "rias-lunch-an-trua-gia-soc",
     description:
-      "Chương trình ưu đãi bữa trưa đặc biệt cho khách hàng: Burger kèm khoai tây và nước chỉ 42.000đ, Cơm gà chiên súp và nước ngọt chỉ 49.000đ. Áp dụng từ 10h30 đến 14h00 các ngày trong tuần (Thứ 2 đến Thứ 6, không áp dụng Thứ 7, Chủ Nhật và ngày Lễ).",
+      "Chương trình ưu đãi bữa trưa đặc biệt cho khách hàng: Gà pop kèm khoai tây và nước chỉ 42.000đ, Cơm gà chiên súp và nước ngọt chỉ 49.000đ. Áp dụng từ 10h30 đến 14h00 các ngày trong tuần (Thứ 2 đến Thứ 6, không áp dụng Thứ 7, Chủ Nhật và ngày Lễ).",
     imageUrl:
       "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?auto=format&fit=crop&w=800&q=80",
     discountType: "FIXED",
