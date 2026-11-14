@@ -386,7 +386,7 @@ export default async function HomePage() {
             <div className="w-12 h-12 rounded-2xl bg-amber-50 text-secondary-hover flex items-center justify-center mb-3">
               <Clock className="w-6 h-6" />
             </div>
-            <h3 className="font-extrabold text-sm text-gray-900">Giao Nhanh 10 Phút Dưới 2 Km</h3>
+            <h3 className="font-extrabold text-sm text-gray-900">Giao Nhanh 10 Phút Dưới 2 </h3>
             <p className="text-xs text-gray-500 mt-1 max-w-xs">
               Món ăn luôn nóng hổi giòn rụm khi đến tay bạn nhờ túi giữ nhiệt chuyên dụng.
             </p>

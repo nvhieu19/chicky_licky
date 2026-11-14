@@ -16,7 +16,6 @@
    ```bash
    npm ci
    ```
-
 3. Tạo file cấu hình môi trường từ file mẫu.
 
    PowerShell:
@@ -30,7 +29,6 @@
    ```bash
    cp .env.example .env
    ```
-
 4. Tạo database MySQL rỗng (nếu chưa có):
 
    ```sql
@@ -38,7 +36,6 @@
      CHARACTER SET utf8mb4
      COLLATE utf8mb4_unicode_ci;
    ```
-
 5. Mở `.env` và cập nhật ít nhất các giá trị sau:
 
    ```env
@@ -51,14 +48,12 @@
    ```
 
    Thay `USER` và `PASSWORD` bằng thông tin MySQL của máy cài đặt. Nếu mật khẩu có ký tự đặc biệt, hãy URL-encode mật khẩu trong `DATABASE_URL`. Không dùng `AUTH_SECRET` hay mật khẩu mặc định trong `.env.example` ở môi trường thật.
-
 6. Sinh Prisma Client và đồng bộ cấu trúc database:
 
    ```bash
    npm run prisma:generate
    npm run prisma:push
    ```
-
 7. (Tùy chọn) Tạo dữ liệu khởi tạo và tài khoản Admin:
 
    ```bash
@@ -84,16 +79,16 @@ npm start
 
 ## Lệnh thường dùng
 
-| Lệnh | Tác dụng |
-| --- | --- |
-| `npm run dev` | Chạy máy chủ phát triển |
-| `npm run build` | Tạo bản build production |
-| `npm start` | Chạy bản build production |
-| `npm run lint` | Kiểm tra ESLint |
-| `npm run prisma:generate` | Sinh Prisma Client |
-| `npm run prisma:push` | Đồng bộ Prisma schema với MySQL |
-| `npm run prisma:seed` | Xóa dữ liệu hiện tại rồi nạp dữ liệu khởi tạo |
-| `npm run prisma:clean` | Xóa dữ liệu đơn hàng, giỏ hàng, sản phẩm, danh mục và nội dung; giữ lại tài khoản Admin |
+| Lệnh                       | Tác dụng                                                                                               |
+| --------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `npm run dev`             | Chạy máy chủ phát triển                                                                             |
+| `npm run build`           | Tạo bản build production                                                                               |
+| `npm start`               | Chạy bản build production                                                                              |
+| `npm run lint`            | Kiểm tra ESLint                                                                                         |
+| `npm run prisma:generate` | Sinh Prisma Client                                                                                       |
+| `npm run prisma:push`     | Đồng bộ Prisma schema với MySQL                                                                      |
+| `npm run prisma:seed`     | Xóa dữ liệu hiện tại rồi nạp dữ liệu khởi tạo                                                 |
+| `npm run prisma:clean`    | Xóa dữ liệu đơn hàng, giỏ hàng, sản phẩm, danh mục và nội dung; giữ lại tài khoản Admin |
 
 `prisma:clean` cũng xóa dữ liệu trong database. Hãy sao lưu và kiểm tra đúng `DATABASE_URL` trước khi chạy.
 
