@@ -1,0 +1,288 @@
+// Prisma Schema for Chicky Licky Fast Food E-Commerce
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum DiscountType {
+  PERCENT
+  FIXED
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PREPARING
+  SHIPPING
+  COMPLETED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  COD
+  BANKING
+  MOMO
+  VNPAY
+}
+
+enum DeliveryType {
+  DELIVERY
+  PICKUP
+}
+
+model User {
+  id           String    @id @default(uuid())
+  name         String
+  email        String    @unique
+  phone        String?
+  passwordHash String
+  role         Role      @default(USER)
+  avatarUrl    String?
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  orders       Order[]
+  carts        Cart[]
+
+  @@index([email])
+  @@index([role])
+}
+
+model Category {
+  id          String    @id @default(uuid())
+  name        String
+  slug        String    @unique
+  description String?   @db.Text
+  imageUrl    String?   @db.LongText
+  sortOrder   Int       @default(0)
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  products    Product[]
+
+  @@index([slug])
+  @@index([isActive])
+}
+
+model Product {
+  id               String      @id @default(uuid())
+  name             String
+  slug             String      @unique
+  shortDescription String?     @db.VarChar(500)
+  description      String?     @db.Text
+  price            Decimal     @db.Decimal(10, 2)
+  salePrice        Decimal?    @db.Decimal(10, 2)
+  imageUrl         String      @db.LongText
+  gallery          String?     @db.Text
+  categoryId       String
+  isBestSeller     Boolean     @default(false)
+  isNew            Boolean     @default(false)
+  isAvailable      Boolean     @default(true)
+  sortOrder        Int         @default(0)
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+
+  category         Category    @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  cartItems        CartItem[]
+  orderItems       OrderItem[]
+
+  @@index([categoryId])
+  @@index([slug])
+  @@index([isBestSeller])
+  @@index([isAvailable])
+}
+
+model Promotion {
+  id            String        @id @default(uuid())
+  title         String
+  slug          String        @unique
+  description   String?       @db.Text
+  imageUrl      String        @db.LongText
+  discountType  DiscountType  @default(PERCENT)
+  discountValue Decimal       @db.Decimal(10, 2)
+  startDate     DateTime
+  endDate       DateTime
+  isActive      Boolean       @default(true)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([slug])
+  @@index([isActive])
+}
+
+model Banner {
+  id          String    @id @default(uuid())
+  title       String
+  description String?   @db.VarChar(500)
+  imageUrl    String    @db.LongText
+  link        String?   @db.VarChar(500)
+  position    String    @default("HERO") // HERO, PROMO_LEFT, PROMO_RIGHT, MENU_TOP
+  sortOrder   Int       @default(0)
+  startDate   DateTime?
+  endDate     DateTime?
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([position])
+  @@index([isActive])
+}
+
+model Coupon {
+  id                String       @id @default(uuid())
+  code              String       @unique
+  discountType      DiscountType @default(PERCENT)
+  discountValue     Decimal      @db.Decimal(10, 2)
+  minimumOrderValue Decimal      @default(0.00) @db.Decimal(10, 2)
+  maximumDiscount   Decimal?     @db.Decimal(10, 2)
+  usageLimit        Int?
+  usedCount         Int          @default(0)
+  startDate         DateTime
+  endDate           DateTime
+  isActive          Boolean      @default(true)
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+
+  @@index([code])
+  @@index([isActive])
+}
+
+model Cart {
+  id           String     @id @default(uuid())
+  userId       String?
+  sessionToken String?    @unique
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  user         User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items        CartItem[]
+
+  @@index([userId])
+  @@index([sessionToken])
+}
+
+model CartItem {
+  id        String   @id @default(uuid())
+  cartId    String
+  productId String
+  quantity  Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  cart      Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([cartId, productId])
+  @@index([cartId])
+  @@index([productId])
+}
+
+model Order {
+  id             String          @id @default(uuid())
+  orderCode      String          @unique
+  userId         String?
+  recipientName  String
+  phone          String
+  email          String?
+  address        String
+  subtotal       Decimal         @db.Decimal(10, 2)
+  discountAmount Decimal         @default(0.00) @db.Decimal(10, 2)
+  shippingFee    Decimal         @default(0.00) @db.Decimal(10, 2)
+  totalAmount    Decimal         @db.Decimal(10, 2)
+  couponCode     String?
+  paymentMethod  PaymentMethod   @default(COD)
+  paymentStatus  PaymentStatus   @default(PENDING)
+  status         OrderStatus     @default(PENDING)
+  deliveryType   DeliveryType    @default(DELIVERY)
+  storeId        String?
+  note           String?         @db.Text
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  user           User?           @relation(fields: [userId], references: [id], onDelete: SetNull)
+  store          Store?          @relation(fields: [storeId], references: [id], onDelete: SetNull)
+  items          OrderItem[]
+  statusHistory  OrderStatusHistory[]
+
+  @@index([orderCode])
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model OrderItem {
+  id           String   @id @default(uuid())
+  orderId      String
+  productId    String?
+  productName  String
+  productImage String   @db.LongText
+  unitPrice    Decimal  @db.Decimal(10, 2)
+  quantity     Int
+  subtotal     Decimal  @db.Decimal(10, 2)
+
+  order        Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product      Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  @@index([orderId])
+  @@index([productId])
+}
+
+model Store {
+  id           String   @id @default(uuid())
+  name         String
+  address      String
+  phone        String
+  openingHours String   @default("08:00 - 22:00")
+  imageUrl     String?  @db.LongText
+  latitude     Float?
+  longitude    Float?
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  orders       Order[]
+
+  @@index([isActive])
+}
+
+model SiteSetting {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  value     String   @db.Text
+  updatedAt DateTime @updatedAt
+
+  @@index([key])
+}
+
+model OrderStatusHistory {
+  id        String       @id @default(uuid())
+  orderId   String
+  oldStatus OrderStatus?
+  newStatus OrderStatus
+  changedBy String?
+  note      String?      @db.Text
+  createdAt DateTime     @default(now())
+
+  order     Order        @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId])
+}
