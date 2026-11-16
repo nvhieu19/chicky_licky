@@ -62,6 +62,18 @@
 
    **Cảnh báo:** lệnh seed xóa dữ liệu hiện có trong các bảng trước khi tạo lại dữ liệu. Chỉ chạy trên database mới/rỗng hoặc sau khi đã sao lưu. Mặc định seed không tạo sản phẩm mẫu; chỉ bật việc tạo sản phẩm mẫu khi đặt `SEED_SAMPLE_PRODUCTS=true` trong môi trường chạy.
 
+## Cập nhật Lucky Wheel trên database hiện có
+
+Trước khi cập nhật schema trên database đang sử dụng, hãy sao lưu MySQL và kiểm tra `DATABASE_URL` trỏ đúng môi trường. Sau đó chạy:
+
+```bash
+mysqldump --single-transaction -u USER -p chicky_licky > chicky_licky_backup.sql
+npm run prisma:generate
+npm run prisma:push
+```
+
+Repository này dùng `prisma db push` để đồng bộ schema và database hiện có chưa được baseline bằng Prisma Migrate. Lucky Wheel chỉ bổ sung model/enum; không chạy `prisma:seed` để cập nhật schema.
+
 ## Chạy ở chế độ phát triển
 
 ```bash

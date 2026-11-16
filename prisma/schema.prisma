@@ -47,6 +47,11 @@ enum DeliveryType {
   PICKUP
 }
 
+enum LuckyWheelResultType {
+  PRIZE
+  NO_PRIZE
+}
+
 model User {
   id           String    @id @default(uuid())
   name         String
@@ -61,9 +66,57 @@ model User {
 
   orders       Order[]
   carts        Cart[]
+  luckyWheelDraw LuckyWheelDraw?
 
   @@index([email])
   @@index([role])
+}
+
+model LuckyWheelSettings {
+  id                      String   @id @default("default")
+  title                   String   @default("VÒNG QUAY MAY MẮN")
+  subtitle                String   @default("Một cơ hội duy nhất - Một phần quà bất ngờ") @db.VarChar(500)
+  noPrizeMessage          String   @db.Text
+  defaultClaimInstruction String   @db.Text
+  isEnabled               Boolean  @default(false)
+  showFloatingWidget      Boolean  @default(false)
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+}
+
+model LuckyWheelPrize {
+  id                String           @id @default(uuid())
+  name              String           @db.VarChar(191)
+  description       String?          @db.Text
+  imageUrl          String           @db.LongText
+  quantityTotal     Int              @default(0)
+  quantityRemaining Int              @default(0)
+  winRateBps        Int              @default(0)
+  claimInstruction  String?          @db.Text
+  sortOrder         Int              @default(0)
+  isActive          Boolean          @default(true)
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  draws             LuckyWheelDraw[]
+
+  @@index([isActive, sortOrder])
+}
+
+model LuckyWheelDraw {
+  id                    String                 @id @default(uuid())
+  userId                String                 @unique
+  prizeId               String?
+  resultType            LuckyWheelResultType
+  prizeNameSnapshot     String                 @db.VarChar(191)
+  prizeImageSnapshot    String?                @db.LongText
+  winRateBpsSnapshot    Int                    @default(0)
+  createdAt             DateTime               @default(now())
+  user                  User                   @relation(fields: [userId], references: [id], onDelete: Restrict)
+  prize                 LuckyWheelPrize?       @relation(fields: [prizeId], references: [id], onDelete: SetNull)
+
+  @@index([prizeId])
+  @@index([resultType, createdAt])
+  @@index([createdAt])
 }
 
 model Category {

@@ -15,6 +15,7 @@ import {
   Store,
   FileText,
   Settings,
+  Gift,
   LogOut,
   Menu,
   X,
@@ -35,7 +36,7 @@ const navItems = [
   { label: "Cửa hàng", href: "/admin/stores", icon: Store },
   { label: "Nội dung", href: "/admin/content", icon: FileText },
   { label: "Cấu hình", href: "/admin/settings", icon: Settings },
-  { label: "Vòng quay may mắn", href: "/admin/lucky-wheel", icon: Settings },
+  { label: "Vòng quay may mắn", href: "/admin/lucky-wheel", icon: Gift },
 ];
 
 export default function AdminLayoutClient({ children }: { children: React.ReactNode }) {

@@ -5,6 +5,7 @@ import { CartProvider } from "@/components/providers/CartContext";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
 import AuthModal from "@/components/auth/AuthModal";
+import LuckyWheelWidget from "@/components/lucky-wheel/LuckyWheelWidget";
 
 export const metadata: Metadata = {
   title: "Chicky Licky - Gà Giòn Chuẩn Vị | Fast Food & Chicken",
@@ -26,6 +27,7 @@ export default function RootLayout({
             <main className="flex-1">{children}</main>
             <Footer />
             <AuthModal />
+            <LuckyWheelWidget />
           </CartProvider>
         </AuthModalProvider>
       </body>
