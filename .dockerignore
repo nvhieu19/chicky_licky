@@ -1,0 +1,50 @@
+
+# Dependencies
+node_modules
+.pnp
+.pnp.js
+
+# Next.js
+.next
+out
+.vercel
+
+# Build outputs
+dist
+build
+coverage
+
+# Environment secrets
+.env
+.env.*
+!.env.example
+
+# Git
+.git
+.gitignore
+
+# Editor
+.vscode
+.idea
+.cursor
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Docker
+Dockerfile*
+docker-compose*.yml
+compose*.yaml
+.dockerignore
+
+# Temporary
+.cache
+.tmp
+.temp
+*.tsbuildinfo

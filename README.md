@@ -104,3 +104,12 @@ Các ảnh thương hiệu tùy chọn được tham chiếu từ thư mục `pu
 ## Tài khoản quản trị
 
 Sau khi chạy seed trên database mới, đăng nhập Admin bằng địa chỉ email và mật khẩu đã cấu hình qua `ADMIN_EMAIL` và `ADMIN_PASSWORD` trong `.env`. Đổi mật khẩu mặc định trước khi dùng ở môi trường thật.
+
+
+* **Tài khoản Quản trị viên (Admin):**
+
+  * Email: `admin@chickylicky.vn`
+  * Mật khẩu: `AdminPassword123!`
+  * **Tài khoản Khách hàng demo (User):**
+  * Email: `khachhang@gmail.com`
+  * Mật khẩu: `ChickyDemo2026!`
