@@ -182,7 +182,6 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
             </div>
           </Link>
         </div>
-
         {/* Nav list */}
         <div className="flex-1 py-4 px-3 space-y-1 overflow-y-auto">
           {navItems.map((item) => {
