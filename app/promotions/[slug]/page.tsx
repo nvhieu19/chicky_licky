@@ -28,7 +28,7 @@ export default async function PromotionDetailPage({ params }: Props) {
   let promo: any = null;
 
   try {
-    const dbPromo = await prisma.promotion.findUnique({
+    const dbPromo = await (prisma.promotion as any).findUnique({
       where: { slug },
       include: {
         comboItems: {
@@ -49,7 +49,7 @@ export default async function PromotionDetailPage({ params }: Props) {
         startDate: new Date(dbPromo.startDate).toLocaleDateString("vi-VN"),
         endDate: new Date(dbPromo.endDate).toLocaleDateString("vi-VN"),
         isActive: dbPromo.isActive,
-        comboItems: dbPromo.comboItems.map((ci) => ({
+        comboItems: (dbPromo.comboItems ?? []).map((ci: any) => ({
           productId: ci.productId,
           quantity: ci.quantity,
           product: {

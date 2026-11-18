@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 export default async function PromotionsPage() {
   let promotions: any[] = [];
   try {
-    const dbPromos = await prisma.promotion.findMany({
+    const dbPromos = await (prisma.promotion as any).findMany({
       where: { isActive: true },
       orderBy: { createdAt: "desc" },
       include: {
@@ -20,7 +20,7 @@ export default async function PromotionsPage() {
         },
       },
     });
-    promotions = dbPromos.map((p) => ({
+    promotions = dbPromos.map((p: any) => ({
       id: p.id,
       title: p.title,
       slug: p.slug,
@@ -29,9 +29,9 @@ export default async function PromotionsPage() {
       discountType: p.discountType,
       discountValue: Number(p.discountValue),
       comboPrice: p.comboPrice != null ? Number(p.comboPrice) : null,
-      startDate: p.startDate.toISOString().split("T")[0],
-      endDate: p.endDate.toISOString().split("T")[0],
-      comboItems: p.comboItems.map((ci) => ({
+      startDate: new Date(p.startDate).toISOString().split("T")[0],
+      endDate: new Date(p.endDate).toISOString().split("T")[0],
+      comboItems: (p.comboItems ?? []).map((ci: any) => ({
         productId: ci.productId,
         quantity: ci.quantity,
         product: {
