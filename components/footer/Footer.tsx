@@ -21,7 +21,7 @@ export default function Footer() {
 
             <div className="text-xs text-gray-600 space-y-1.5 leading-relaxed">
               <p className="font-bold text-gray-900 text-sm">VIETNAM CHICKY LICKY CO.LTD</p>
-              <p>Địa chỉ: 167 Hà Huy Tập, Thanh Khê, Đà Nẵng</p>
+              <p>Địa chỉ: 114 Khúc Hạo, Phường Sơn Trà, Thành phố Đà Nẵng</p>
               <p>Điện thoại: 078 992 4777</p>
               <p>Email: info.chickylicky@gmail.com</p>
             </div>
