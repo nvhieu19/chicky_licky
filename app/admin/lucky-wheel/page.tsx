@@ -13,6 +13,7 @@ import {
   Sparkles,
   ToggleLeft,
   ToggleRight,
+  Trash2,
   Trophy,
   Users,
   X,
@@ -67,7 +68,7 @@ type Draw = {
 
 const initialSettings: SettingsForm = {
   title: "VÒNG QUAY MAY MẮN",
-  subtitle: "Một cơ hội duy nhất - Một phần quà bất ngờ",
+  subtitle: "Mỗi tài khoản có một lượt quay - Có cơ hội nhận thêm lượt",
   noPrizeMessage: "Tiếc quá! Hẹn gặp bạn ở những ưu đãi tiếp theo của Chicky Licky.",
   defaultClaimInstruction: "",
   isEnabled: false,
@@ -307,7 +308,7 @@ export default function LuckyWheelAdminPage() {
     setNotice("");
     try {
       const response = await fetch(`/api/admin/lucky-wheel/prizes/${prize.id}`, {
-        method: "DELETE",
+        method: "PATCH",
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.message || "Không thể ngừng phần thưởng.");
@@ -315,6 +316,29 @@ export default function LuckyWheelAdminPage() {
       await loadOverview();
     } catch (deactivateError) {
       setError(deactivateError instanceof Error ? deactivateError.message : "Không thể ngừng phần thưởng.");
+    }
+  };
+
+  const deletePrize = async (prize: Prize) => {
+    if (
+      !window.confirm(
+        `Xóa vĩnh viễn phần thưởng “${prize.name}”? Kết quả đã quay vẫn được giữ trong lịch sử.`
+      )
+    ) {
+      return;
+    }
+    setError("");
+    setNotice("");
+    try {
+      const response = await fetch(`/api/admin/lucky-wheel/prizes/${prize.id}`, {
+        method: "DELETE",
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || "Không thể xóa phần thưởng.");
+      setNotice(data.message);
+      await loadOverview();
+    } catch (deleteError) {
+      setError(deleteError instanceof Error ? deleteError.message : "Không thể xóa phần thưởng.");
     }
   };
 
@@ -511,6 +535,13 @@ export default function LuckyWheelAdminPage() {
                               Ẩn
                             </button>
                           )}
+                          <button
+                            type="button"
+                            onClick={() => void deletePrize(prize)}
+                            className="rounded-lg border border-red-100 px-3 py-2 font-bold text-red-600 hover:bg-red-50"
+                          >
+                            <Trash2 className="inline h-3.5 w-3.5" /> Xóa
+                          </button>
                         </div>
                       </td>
                     </tr>

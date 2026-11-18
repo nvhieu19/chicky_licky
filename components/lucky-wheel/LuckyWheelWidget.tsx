@@ -64,11 +64,29 @@ function pointAt(angle: number, radius: number) {
   };
 }
 
-function formatRate(bps: number) {
-  return `${(bps / 100).toLocaleString("vi-VN", {
-    minimumFractionDigits: bps % 100 ? 2 : 0,
-    maximumFractionDigits: 2,
-  })}%`;
+function wrapWheelLabel(name: string, maxChars: number) {
+  const lines: string[] = [];
+  let line = "";
+
+  for (const word of name.trim().split(/\s+/)) {
+    const candidate = line ? `${line} ${word}` : word;
+    if (line && candidate.length > maxChars) {
+      lines.push(line);
+      line = word;
+    } else {
+      line = candidate;
+    }
+  }
+  if (line) lines.push(line);
+
+  if (lines.length > 2) {
+    lines.length = 2;
+    lines[1] = `${lines[1].slice(0, Math.max(1, maxChars - 1)).trimEnd()}…`;
+  }
+
+  return lines.map((item) =>
+    item.length > maxChars ? `${item.slice(0, Math.max(1, maxChars - 1))}…` : item
+  );
 }
 
 export default function LuckyWheelWidget() {
@@ -301,9 +319,14 @@ export default function LuckyWheelWidget() {
             const midAngle = startAngle + span / 2;
             const textPoint = pointAt(midAngle, 111);
             const imagePoint = pointAt(midAngle, 139);
-            const displayName =
-              segment.name.length > 16 ? `${segment.name.slice(0, 15)}…` : segment.name;
-            const showLabel = span >= 9;
+            const fontSize = span < 34 ? 6 : span < 60 ? 7 : 9;
+            const labelWidth = 2 * 111 * Math.sin((Math.min(span, 180) * Math.PI) / 360);
+            const maxLabelChars = Math.max(
+              4,
+              Math.floor((labelWidth * 0.78) / (fontSize * 0.62))
+            );
+            const labelLines = wrapWheelLabel(segment.name, maxLabelChars);
+            const showLabel = span >= 22;
             startAngle = endAngle;
             return (
               <g key={segment.id}>
@@ -331,10 +354,22 @@ export default function LuckyWheelWidget() {
                     dominantBaseline="middle"
                     transform={`rotate(${midAngle}, ${textPoint.x}, ${textPoint.y})`}
                     fill={index % 2 === 1 ? "#4b2511" : "#fff8e4"}
-                    fontSize={span < 18 ? 6 : span < 32 ? 7 : 9}
+                    fontSize={fontSize}
                     fontWeight="800"
                   >
-                    {displayName}
+                    {labelLines.map((line, lineIndex) => (
+                      <tspan
+                        key={`${segment.id}-${lineIndex}`}
+                        x={textPoint.x}
+                        dy={
+                          lineIndex === 0
+                            ? -((labelLines.length - 1) * (fontSize + 1)) / 2
+                            : fontSize + 1
+                        }
+                      >
+                        {line}
+                      </tspan>
+                    ))}
                   </text>
                 )}
               </g>
@@ -530,32 +565,6 @@ export default function LuckyWheelWidget() {
                   </div>
                 )}
 
-                <div className="lucky-wheel-legend">
-                  <span>PHẦN THƯỞNG CÓ THỂ NHẬN</span>
-                  <div>
-                    {status.prizes.map((prize) => (
-                      <span key={prize.id}>
-                        <Image
-                          src={prize.imageUrl}
-                          alt=""
-                          width={25}
-                          height={25}
-                          unoptimized
-                        />
-                        <b>{prize.name}</b>
-                        <small>{formatRate(prize.winRateBps)}</small>
-                      </span>
-                    ))}
-                    <span>
-                      <i className="lucky-wheel-no-prize-dot" />
-                      <b>May mắn lần sau</b>
-                      <small>{formatRate(status.noPrizeBps)}</small>
-                    </span>
-                    {!status.prizes.length && (
-                      <p>Hiện chưa có phần thưởng khả dụng.</p>
-                    )}
-                  </div>
-                </div>
               </>
             )}
           </section>

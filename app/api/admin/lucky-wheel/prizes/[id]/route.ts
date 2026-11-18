@@ -84,7 +84,7 @@ export async function PUT(request: Request, { params }: RouteContext) {
   }
 }
 
-export async function DELETE(_request: Request, { params }: RouteContext) {
+export async function PATCH(_request: Request, { params }: RouteContext) {
   try {
     await requireAdmin();
     const { id } = await params;
@@ -103,5 +103,26 @@ export async function DELETE(_request: Request, { params }: RouteContext) {
     }
     console.error("Admin lucky wheel prize deactivation error:", error);
     return NextResponse.json({ message: "Không thể ngừng hoạt động phần thưởng" }, { status: 500 });
+  }
+}
+
+export async function DELETE(_request: Request, { params }: RouteContext) {
+  try {
+    await requireAdmin();
+    const { id } = await params;
+    const result = await prisma.luckyWheelPrize.deleteMany({ where: { id } });
+    if (result.count === 0) {
+      return NextResponse.json({ message: "Không tìm thấy phần thưởng" }, { status: 404 });
+    }
+    return NextResponse.json({
+      message: "Đã xóa phần thưởng; lịch sử quay vẫn được giữ nguyên",
+    });
+  } catch (error) {
+    const status = getAdminErrorStatus(error);
+    if (status) {
+      return NextResponse.json({ message: "Không có quyền truy cập" }, { status });
+    }
+    console.error("Admin lucky wheel prize deletion error:", error);
+    return NextResponse.json({ message: "Không thể xóa phần thưởng" }, { status: 500 });
   }
 }

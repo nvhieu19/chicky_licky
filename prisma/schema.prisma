@@ -82,7 +82,7 @@ model User {
 model LuckyWheelSettings {
   id                      String   @id @default("default")
   title                   String   @default("VÒNG QUAY MAY MẮN")
-  subtitle                String   @default("Một cơ hội duy nhất - Một phần quà bất ngờ") @db.VarChar(500)
+  subtitle                String   @default("Mỗi tài khoản có một lượt quay - Có cơ hội nhận thêm lượt") @db.VarChar(500)
   noPrizeMessage          String   @db.Text
   defaultClaimInstruction String   @db.Text
   isEnabled               Boolean  @default(false)

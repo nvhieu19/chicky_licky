@@ -11,7 +11,7 @@ import prisma from "@/lib/prisma";
 const defaultSettings = {
   id: LUCKY_WHEEL_SETTINGS_ID,
   title: "VÒNG QUAY MAY MẮN",
-  subtitle: "Một cơ hội duy nhất - Một phần quà bất ngờ",
+  subtitle: "Mỗi tài khoản có một lượt quay - Có cơ hội nhận thêm lượt",
   noPrizeMessage: "Tiếc quá! Hẹn gặp bạn ở những ưu đãi tiếp theo của Chicky Licky.",
   defaultClaimInstruction: "",
   isEnabled: false,
