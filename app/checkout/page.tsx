@@ -20,11 +20,19 @@ import { useAuthModal } from "@/components/providers/AuthModalContext";
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { items, subtotal, discountAmount, shippingFee, totalAmount, appliedCoupon, clearCart } =
-    useCart();
+  const {
+    items,
+    subtotal,
+    discountAmount,
+    shippingFee,
+    totalAmount,
+    appliedCoupon,
+    clearCart,
+    deliveryType,
+    setDeliveryType,
+  } = useCart();
   const { currentUser } = useAuthModal();
 
-  const [deliveryType, setDeliveryType] = useState<"DELIVERY" | "PICKUP">("DELIVERY");
   const [recipientName, setRecipientName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
