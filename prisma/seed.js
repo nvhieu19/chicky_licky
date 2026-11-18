@@ -490,7 +490,7 @@ async function main() {
   // 9. Create Site Settings
   const settingsData = [
     { key: "SITE_NAME", value: "Chicky Licky" },
-    { key: "SITE_TAGLINE", value: "Gà Giòn Chuẩn Vị - Bữa Ăn Hạnh Phúc" },
+    { key: "SITE_TAGLINE", value: "LƯỚT WEB CHỌN MÓN - TRỌN VẸN CUỘC VUI" },
     { key: "HOTLINE", value: "078 992 4777" },
     { key: "DELIVERY_HOTLINE", value: "078 992 4777" },
     { key: "COMPANY_NAME", value: "VIETNAM CHICKY LICKY FAST FOOD CO.LTD" },

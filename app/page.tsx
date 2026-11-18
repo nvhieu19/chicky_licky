@@ -128,7 +128,7 @@ export default async function HomePage() {
                     Hot Deal
                   </span>
                   <span className="text-sm font-extrabold text-gray-800">
-                    CHICKY LICKY - GÀ GIÒN CHUẨN VỊ
+                    CHICKY LICKY - LƯỚT WEB CHỌN MÓN - TRỌN VẸN CUỘC VUI
                   </span>
                 </div>
 

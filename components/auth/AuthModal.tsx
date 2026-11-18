@@ -489,7 +489,7 @@ export default function AuthModal() {
               Chicky Club Membership
             </span>
             <h3 className="text-3xl font-black tracking-tight leading-tight">
-              GÀ GIÒN CHUẨN VỊ <br />
+              LƯỚT WEB CHỌN MÓN - TRỌN VẸN CUỘC VUI <br />
               <span className="text-secondary">ƯU ĐÃI NGẬP TRÀN</span>
             </h3>
           </div>

@@ -74,7 +74,7 @@ export default function BrandLogo({
               isWhite ? "text-secondary" : "text-secondary-hover"
             }`}
           >
-            GÀ GIÒN CHUẨN VỊ
+            LƯỚT WEB CHỌN MÓN - TRỌN VẸN CUỘC VUI
           </span>
         )}
       </div>

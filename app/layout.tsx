@@ -8,7 +8,7 @@ import AuthModal from "@/components/auth/AuthModal";
 import LuckyWheelWidget from "@/components/lucky-wheel/LuckyWheelWidget";
 
 export const metadata: Metadata = {
-  title: "Chicky Licky - Gà Giòn Chuẩn Vị | Fast Food & Chicken",
+  title: "Chicky Licky - LƯỚT WEB CHỌN MÓN - TRỌN VẸN CUỘC VUI | Fast Food & Chicken",
   description:
     "Thưởng thức gà rán pop giòn rụm, cơm gà đượm sốt, combo ăn trưa chỉ từ 42K cùng hàng ngàn ưu đãi hấp dẫn tại Chicky Licky. Giao hàng tận nơi nhanh chóng!",
 };
