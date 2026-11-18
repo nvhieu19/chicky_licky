@@ -243,7 +243,9 @@ export default function LuckyWheelWidget() {
         .reduce((sum, segment) => sum + segment.weight, 0);
       const midpoint =
         ((previousWeight + spinSegments[selectedIndex].weight / 2) / totalWeight) * 360;
-      const target = rotation + 6 * 360 + ((360 - midpoint) % 360);
+      const currentOffset = ((rotation + midpoint) % 360 + 360) % 360;
+      const alignmentOffset = (360 - currentOffset) % 360;
+      const target = rotation + 6 * 360 + alignmentOffset;
       const finalResult = {
         ...draw,
         claimInstruction:
