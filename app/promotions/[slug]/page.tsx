@@ -2,72 +2,25 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Clock, Gift, ShieldAlert, CheckCircle2, ArrowRight } from "lucide-react";
+import {
+  ArrowLeft,
+  Clock,
+  Gift,
+  ShieldAlert,
+  CheckCircle2,
+  ArrowRight,
+  Layers,
+  Tag,
+} from "lucide-react";
 import prisma from "@/lib/prisma";
+import { formatPrice } from "@/lib/utils";
+import ComboOrderButton from "@/components/promotions/ComboOrderButton";
 
 export const dynamic = "force-dynamic";
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
-
-const fallbackPromos = [
-  {
-    id: "promo1",
-    title: "Ria's Lunch Ăn Trưa Giá Sốc 42K - 49K",
-    slug: "rias-lunch-an-trua-gia-soc",
-    description:
-      "Chương trình ưu đãi bữa trưa đặc biệt cho khách hàng: Gà pop kèm khoai tây và nước chỉ 42.000đ, Cơm gà chiên súp và nước ngọt chỉ 49.000đ. Áp dụng từ 10h30 đến 14h00 các ngày trong tuần (Thứ 2 đến Thứ 6, không áp dụng Thứ 7, Chủ Nhật và ngày Lễ).",
-    imageUrl:
-      "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?auto=format&fit=crop&w=800&q=80",
-    discountType: "FIXED",
-    discountValue: 23000,
-    startDate: "01/01/2026",
-    endDate: "31/12/2026",
-    rules: [
-      "Áp dụng trong khung giờ vàng: 10h30 - 14h00 từ Thứ 2 đến Thứ 6.",
-      "Không áp dụng đồng thời với các chương trình khuyến mãi khác.",
-      "Áp dụng cho cả dịch vụ ăn tại chỗ, mua mang đi và giao hàng tận nơi qua website.",
-      "Mỗi khách hàng không giới hạn số lượng combo trong một đơn hàng.",
-    ],
-  },
-  {
-    id: "promo2",
-    title: "Đại Tiệc Cuối Tuần - Mua 2 Tặng 1 Gà Rán",
-    slug: "dai-tiec-cuoi-tuan-mua-2-tang-1",
-    description:
-      "Vào các ngày Thứ 7 và Chủ Nhật hàng tuần, khi mua từ 2 miếng gà rán bất kỳ (Gà giòn cay hoặc Gà sốt H&S), quý khách sẽ được tặng ngay 1 miếng gà rán giòn rụm hoặc 1 ly Pepsi tươi mát lạnh.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1569058242253-92a9c755a0ec?auto=format&fit=crop&w=800&q=80",
-    discountType: "PERCENT",
-    discountValue: 33,
-    startDate: "01/01/2026",
-    endDate: "31/12/2026",
-    rules: [
-      "Chỉ áp dụng vào Thứ 7 và Chủ Nhật hàng tuần.",
-      "Áp dụng cho menu Gà rán lẻ và combo có gà rán.",
-      "Quà tặng không có giá trị quy đổi thành tiền mặt.",
-    ],
-  },
-  {
-    id: "promo3",
-    title: "Ưu Đãi Hội Viên Mới - Tặng Voucher 20.000đ",
-    slug: "uu-dai-hoi-vien-moi-chicky-club",
-    description:
-      "Đăng ký tài khoản Chicky Licky ngay hôm nay để nhận mã giảm giá 20.000đ cho đơn hàng đầu tiên từ 100.000đ cùng hàng ngàn điểm thưởng tích lũy hấp dẫn.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80",
-    discountType: "FIXED",
-    discountValue: 20000,
-    startDate: "01/01/2026",
-    endDate: "31/12/2026",
-    rules: [
-      "Áp dụng cho khách hàng đăng ký tài khoản mới trên website hoặc ứng dụng.",
-      "Voucher có hiệu lực trong vòng 30 ngày kể từ ngày kích hoạt tài khoản.",
-      "Áp dụng cho đơn hàng có giá trị từ 100.000đ trở lên.",
-    ],
-  },
-];
 
 export default async function PromotionDetailPage({ params }: Props) {
   const { slug } = await params;
@@ -77,6 +30,11 @@ export default async function PromotionDetailPage({ params }: Props) {
   try {
     const dbPromo = await prisma.promotion.findUnique({
       where: { slug },
+      include: {
+        comboItems: {
+          include: { product: true },
+        },
+      },
     });
     if (dbPromo) {
       promo = {
@@ -87,8 +45,22 @@ export default async function PromotionDetailPage({ params }: Props) {
         imageUrl: dbPromo.imageUrl,
         discountType: dbPromo.discountType,
         discountValue: Number(dbPromo.discountValue),
+        comboPrice: dbPromo.comboPrice != null ? Number(dbPromo.comboPrice) : null,
         startDate: new Date(dbPromo.startDate).toLocaleDateString("vi-VN"),
         endDate: new Date(dbPromo.endDate).toLocaleDateString("vi-VN"),
+        isActive: dbPromo.isActive,
+        comboItems: dbPromo.comboItems.map((ci) => ({
+          productId: ci.productId,
+          quantity: ci.quantity,
+          product: {
+            id: ci.product.id,
+            name: ci.product.name,
+            slug: ci.product.slug,
+            price: Number(ci.product.price),
+            salePrice: ci.product.salePrice != null ? Number(ci.product.salePrice) : null,
+            imageUrl: ci.product.imageUrl,
+          },
+        })),
         rules: [
           "Áp dụng cho toàn bộ khách hàng trên toàn hệ thống Chicky Licky.",
           "Áp dụng khi đặt hàng trực tiếp trên Website hoặc qua Hotline 078 992 4777.",
@@ -101,12 +73,18 @@ export default async function PromotionDetailPage({ params }: Props) {
   }
 
   if (!promo) {
-    promo = fallbackPromos.find((p) => p.slug === slug);
-  }
-
-  if (!promo) {
     notFound();
   }
+
+  const isCombo = promo.discountType === "COMBO";
+
+  // Tính tổng giá gốc các món combo
+  const comboTotalOriginal = isCombo
+    ? promo.comboItems.reduce((sum: number, ci: any) => {
+        return sum + (ci.product.salePrice ?? ci.product.price) * ci.quantity;
+      }, 0)
+    : 0;
+  const comboSaving = isCombo ? Math.max(0, comboTotalOriginal - (promo.comboPrice ?? 0)) : 0;
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
@@ -130,16 +108,32 @@ export default async function PromotionDetailPage({ params }: Props) {
             alt={promo.title}
             fill
             priority
+            unoptimized={promo.imageUrl?.startsWith("data:")}
             className="object-cover"
           />
-          <div className="absolute top-4 left-4 px-3.5 py-1.5 bg-secondary text-gray-900 text-xs font-black rounded-xl shadow-md">
-            {promo.discountType === "PERCENT"
-              ? `Ưu đãi ${promo.discountValue}%`
-              : `Giảm ${(promo.discountValue / 1000).toFixed(0)}K`}
+          <div className="absolute top-4 left-4">
+            {promo.discountType === "PERCENT" && (
+              <span className="inline-flex items-center gap-1 px-3.5 py-1.5 bg-secondary text-gray-900 text-xs font-black rounded-xl shadow-md">
+                <Tag className="w-3.5 h-3.5" />
+                Ưu đãi {promo.discountValue}%
+              </span>
+            )}
+            {promo.discountType === "FIXED" && (
+              <span className="inline-flex items-center gap-1 px-3.5 py-1.5 bg-secondary text-gray-900 text-xs font-black rounded-xl shadow-md">
+                <Tag className="w-3.5 h-3.5" />
+                Giảm {formatPrice(promo.discountValue)}
+              </span>
+            )}
+            {isCombo && (
+              <span className="inline-flex items-center gap-1 px-3.5 py-1.5 bg-primary text-white text-xs font-black rounded-xl shadow-md">
+                <Layers className="w-3.5 h-3.5" />
+                COMBO ĐẶC BIỆT
+              </span>
+            )}
           </div>
         </div>
 
-        {/* Details Content */}
+        {/* Details */}
         <div className="p-6 sm:p-10 space-y-6">
           <div className="flex flex-wrap items-center gap-3 text-xs text-gray-500">
             <span className="flex items-center gap-1.5 font-bold text-primary bg-red-50 px-3 py-1 rounded-full">
@@ -148,7 +142,7 @@ export default async function PromotionDetailPage({ params }: Props) {
             </span>
             <span className="flex items-center gap-1.5">
               <Clock className="w-3.5 h-3.5" />
-              Thời gian áp dụng: {promo.startDate} - {promo.endDate}
+              Thời gian: {promo.startDate} - {promo.endDate}
             </span>
           </div>
 
@@ -156,9 +150,78 @@ export default async function PromotionDetailPage({ params }: Props) {
             {promo.title}
           </h1>
 
-          <div className="prose prose-sm max-w-none text-gray-700 leading-relaxed font-medium">
-            <p className="text-sm sm:text-base">{promo.description}</p>
-          </div>
+          {promo.description && (
+            <div className="prose prose-sm max-w-none text-gray-700 leading-relaxed font-medium">
+              <p className="text-sm sm:text-base">{promo.description}</p>
+            </div>
+          )}
+
+          {/* COMBO: hiện danh sách món + giá */}
+          {isCombo && promo.comboItems.length > 0 && (
+            <div className="bg-orange-50 rounded-2xl border border-orange-100 p-5 space-y-4">
+              <div className="flex items-center gap-2">
+                <Layers className="w-4 h-4 text-orange-500" />
+                <h3 className="text-sm font-black text-orange-800 uppercase tracking-wide">
+                  Combo gồm các món:
+                </h3>
+              </div>
+
+              <div className="space-y-3">
+                {promo.comboItems.map((ci: any) => (
+                  <div
+                    key={ci.productId}
+                    className="flex items-center gap-3 bg-white rounded-xl px-4 py-3 border border-orange-100"
+                  >
+                    <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-gray-100 shrink-0">
+                      <Image
+                        src={ci.product.imageUrl}
+                        alt={ci.product.name}
+                        fill
+                        unoptimized={ci.product.imageUrl?.startsWith("data:")}
+                        className="object-cover"
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <span className="block text-sm font-black text-gray-900 line-clamp-1">
+                        {ci.product.name}
+                      </span>
+                      <span className="text-xs text-gray-500">
+                        Giá gốc: {formatPrice(ci.product.salePrice ?? ci.product.price)}
+                      </span>
+                    </div>
+                    <span className="shrink-0 text-sm font-black text-orange-600">
+                      ×{ci.quantity}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Pricing summary */}
+              <div className="border-t border-orange-100 pt-4 space-y-1.5">
+                <div className="flex justify-between text-xs text-gray-500">
+                  <span>Tổng giá gốc</span>
+                  <span className="line-through">{formatPrice(comboTotalOriginal)}</span>
+                </div>
+                {comboSaving > 0 && (
+                  <div className="flex justify-between text-xs text-green-600 font-bold">
+                    <span>Tiết kiệm</span>
+                    <span>-{formatPrice(comboSaving)}</span>
+                  </div>
+                )}
+                <div className="flex justify-between text-base font-black text-primary">
+                  <span>Giá Combo</span>
+                  <span>{formatPrice(promo.comboPrice ?? 0)}</span>
+                </div>
+              </div>
+
+              {/* Combo order button */}
+              <ComboOrderButton
+                comboItems={promo.comboItems}
+                comboPrice={promo.comboPrice ?? 0}
+                comboTitle={promo.title}
+              />
+            </div>
+          )}
 
           {/* Terms & Conditions */}
           {promo.rules && promo.rules.length > 0 && (
@@ -178,19 +241,21 @@ export default async function PromotionDetailPage({ params }: Props) {
             </div>
           )}
 
-          {/* Action Call */}
+          {/* CTA footer */}
           <div className="pt-6 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-xs text-gray-500">
-              Cần hỗ trợ giải đáp về chương trình? Gọi ngay Hotline{" "}
+              Cần hỗ trợ? Gọi Hotline{" "}
               <strong className="text-primary font-bold">078 992 4777</strong>.
             </p>
-            <Link
-              href="/menu"
-              className="w-full sm:w-auto px-8 py-3.5 bg-primary text-white text-xs font-black rounded-xl hover:bg-primary-hover shadow-lg shadow-red-200 transition-all flex items-center justify-center gap-2"
-            >
-              <span>Xem Menu & Đặt Ngay</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
+            {!isCombo && (
+              <Link
+                href="/menu"
+                className="w-full sm:w-auto px-8 py-3.5 bg-primary text-white text-xs font-black rounded-xl hover:bg-primary-hover shadow-lg shadow-red-200 transition-all flex items-center justify-center gap-2"
+              >
+                <span>Xem Menu &amp; Đặt Ngay</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            )}
           </div>
         </div>
       </div>
