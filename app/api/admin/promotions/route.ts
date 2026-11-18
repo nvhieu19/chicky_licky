@@ -21,20 +21,39 @@ function validationResponse(error: { issues: { message: string }[] }) {
   );
 }
 
+function serializePromo(p: any) {
+  return {
+    ...p,
+    discountValue: Number(p.discountValue),
+    comboPrice: p.comboPrice != null ? Number(p.comboPrice) : null,
+    startDate: p.startDate instanceof Date ? p.startDate.toISOString() : p.startDate,
+    endDate: p.endDate instanceof Date ? p.endDate.toISOString() : p.endDate,
+    comboItems: (p.comboItems ?? []).map((ci: any) => ({
+      ...ci,
+      product: ci.product
+        ? {
+            ...ci.product,
+            price: Number(ci.product.price),
+            salePrice: ci.product.salePrice != null ? Number(ci.product.salePrice) : null,
+          }
+        : null,
+    })),
+  };
+}
+
 export async function GET() {
   try {
     await requireAdmin();
     const promotions = await prisma.promotion.findMany({
       orderBy: { createdAt: "desc" },
+      include: {
+        comboItems: {
+          include: { product: true },
+          orderBy: { quantity: "desc" },
+        },
+      },
     });
-    return NextResponse.json({
-      promotions: promotions.map((p) => ({
-        ...p,
-        discountValue: Number(p.discountValue),
-        startDate: p.startDate.toISOString(),
-        endDate: p.endDate.toISOString(),
-      })),
-    });
+    return NextResponse.json({ promotions: promotions.map(serializePromo) });
   } catch (error) {
     const denied = authorizationResponse(error);
     if (denied) return denied;
@@ -52,18 +71,33 @@ export async function POST(req: Request) {
 
     if (!parsed.success) return validationResponse(parsed.error);
 
+    const { comboItems, comboPrice, ...promoData } = parsed.data;
+
     const promo = await prisma.promotion.create({
       data: {
-        ...parsed.data,
-        startDate: new Date(parsed.data.startDate),
-        endDate: new Date(parsed.data.endDate),
+        ...promoData,
+        comboPrice: comboPrice ?? null,
+        startDate: new Date(promoData.startDate),
+        endDate: new Date(promoData.endDate),
+        comboItems:
+          promoData.discountType === "COMBO" && comboItems && comboItems.length > 0
+            ? {
+                create: comboItems.map((ci) => ({
+                  productId: ci.productId,
+                  quantity: ci.quantity,
+                })),
+              }
+            : undefined,
+      },
+      include: {
+        comboItems: { include: { product: true } },
       },
     });
 
-    return NextResponse.json({
-      message: "Tạo khuyến mãi thành công",
-      promotion: { ...promo, discountValue: Number(promo.discountValue) },
-    }, { status: 201 });
+    return NextResponse.json(
+      { message: "Tạo khuyến mãi thành công", promotion: serializePromo(promo) },
+      { status: 201 }
+    );
   } catch (error: unknown) {
     const denied = authorizationResponse(error);
     if (denied) return denied;
@@ -88,18 +122,36 @@ export async function PUT(req: Request) {
     const parsed = promotionSchema.safeParse(promotionData);
     if (!parsed.success) return validationResponse(parsed.error);
 
+    const { comboItems, comboPrice, ...promoData } = parsed.data;
+
+    // Xoá comboItems cũ, rồi tạo lại (upsert-safe)
+    await prisma.promotionComboItem.deleteMany({ where: { promotionId: id } });
+
     const promotion = await prisma.promotion.update({
       where: { id },
       data: {
-        ...parsed.data,
-        startDate: new Date(parsed.data.startDate),
-        endDate: new Date(parsed.data.endDate),
+        ...promoData,
+        comboPrice: comboPrice ?? null,
+        startDate: new Date(promoData.startDate),
+        endDate: new Date(promoData.endDate),
+        comboItems:
+          promoData.discountType === "COMBO" && comboItems && comboItems.length > 0
+            ? {
+                create: comboItems.map((ci) => ({
+                  productId: ci.productId,
+                  quantity: ci.quantity,
+                })),
+              }
+            : undefined,
+      },
+      include: {
+        comboItems: { include: { product: true } },
       },
     });
 
     return NextResponse.json({
       message: "Cập nhật khuyến mãi thành công",
-      promotion: { ...promotion, discountValue: Number(promotion.discountValue) },
+      promotion: serializePromo(promotion),
     });
   } catch (error: unknown) {
     const denied = authorizationResponse(error);
@@ -119,6 +171,7 @@ export async function DELETE(req: Request) {
     const id = searchParams.get("id");
     if (!id) return NextResponse.json({ message: "Thiếu ID khuyến mãi" }, { status: 400 });
 
+    // comboItems sẽ tự cascade delete do onDelete: Cascade trong schema
     await prisma.promotion.delete({ where: { id } });
     return NextResponse.json({ message: "Xóa khuyến mãi thành công" });
   } catch (error) {

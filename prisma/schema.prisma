@@ -17,6 +17,7 @@ enum Role {
 enum DiscountType {
   PERCENT
   FIXED
+  COMBO
 }
 
 enum OrderStatus {
@@ -157,6 +158,7 @@ model Product {
   category         Category    @relation(fields: [categoryId], references: [id], onDelete: Restrict)
   cartItems        CartItem[]
   orderItems       OrderItem[]
+  comboItems       PromotionComboItem[]
 
   @@index([categoryId])
   @@index([slug])
@@ -172,14 +174,30 @@ model Promotion {
   imageUrl      String        @db.LongText
   discountType  DiscountType  @default(PERCENT)
   discountValue Decimal       @db.Decimal(10, 2)
+  comboPrice    Decimal?      @db.Decimal(10, 2)
   startDate     DateTime
   endDate       DateTime
   isActive      Boolean       @default(true)
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
 
+  comboItems    PromotionComboItem[]
+
   @@index([slug])
   @@index([isActive])
+}
+
+model PromotionComboItem {
+  id          String    @id @default(uuid())
+  promotionId String
+  productId   String
+  quantity    Int       @default(1)
+
+  promotion   Promotion @relation(fields: [promotionId], references: [id], onDelete: Cascade)
+  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([promotionId, productId])
+  @@index([promotionId])
 }
 
 model Banner {

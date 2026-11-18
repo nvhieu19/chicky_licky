@@ -87,8 +87,18 @@ export const promotionSchema = z
     slug: z.string().min(2, "Slug không được để trống"),
     description: z.string().optional().nullable(),
     imageUrl: z.string().min(1, "Vui lòng cung cấp hình ảnh khuyến mãi"),
-    discountType: z.enum(["PERCENT", "FIXED"]).default("PERCENT"),
-    discountValue: z.coerce.number().positive("Giá trị giảm phải lớn hơn 0"),
+    discountType: z.enum(["PERCENT", "FIXED", "COMBO"]).default("PERCENT"),
+    discountValue: z.coerce.number().min(0, "Giá trị giảm không được âm"),
+    comboPrice: z.coerce.number().positive("Giá combo phải lớn hơn 0").optional().nullable(),
+    comboItems: z
+      .array(
+        z.object({
+          productId: z.string().min(1),
+          quantity: z.number().int().positive().default(1),
+        })
+      )
+      .optional()
+      .nullable(),
     startDate: z.string().min(1, "Vui lòng chọn ngày bắt đầu"),
     endDate: z.string().min(1, "Vui lòng chọn ngày kết thúc"),
     isActive: z.boolean().default(true),
@@ -108,6 +118,39 @@ export const promotionSchema = z
         message: "Mức giảm theo phần trăm không được vượt quá 100%",
         path: ["discountValue"],
       });
+    }
+
+    if (promotion.discountType === "PERCENT" && promotion.discountValue <= 0) {
+      context.addIssue({
+        code: "custom",
+        message: "Giá trị giảm phải lớn hơn 0",
+        path: ["discountValue"],
+      });
+    }
+
+    if (promotion.discountType === "FIXED" && promotion.discountValue <= 0) {
+      context.addIssue({
+        code: "custom",
+        message: "Giá trị giảm phải lớn hơn 0",
+        path: ["discountValue"],
+      });
+    }
+
+    if (promotion.discountType === "COMBO") {
+      if (!promotion.comboPrice || promotion.comboPrice <= 0) {
+        context.addIssue({
+          code: "custom",
+          message: "Vui lòng nhập giá combo",
+          path: ["comboPrice"],
+        });
+      }
+      if (!promotion.comboItems || promotion.comboItems.length === 0) {
+        context.addIssue({
+          code: "custom",
+          message: "Vui lòng chọn ít nhất 1 món cho combo",
+          path: ["comboItems"],
+        });
+      }
     }
   });
 
