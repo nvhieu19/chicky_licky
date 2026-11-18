@@ -32,12 +32,19 @@ export async function GET() {
       noPrizeDraws,
       remaining,
       activePrizes,
+      participants,
     ] = await Promise.all([
       prisma.luckyWheelDraw.count(),
-      prisma.luckyWheelDraw.count({ where: { resultType: "PRIZE" } }),
+      prisma.luckyWheelDraw.count({
+        where: { resultType: { in: ["PRIZE", "EXTRA_SPIN"] } },
+      }),
       prisma.luckyWheelDraw.count({ where: { resultType: "NO_PRIZE" } }),
-      prisma.luckyWheelPrize.aggregate({ _sum: { quantityRemaining: true } }),
+      prisma.luckyWheelPrize.aggregate({
+        where: { type: "ITEM" },
+        _sum: { quantityRemaining: true },
+      }),
       prisma.luckyWheelPrize.count({ where: { isActive: true } }),
+      prisma.luckyWheelDraw.count({ where: { spinNumber: 1 } }),
     ]);
 
     return NextResponse.json({
@@ -48,7 +55,7 @@ export async function GET() {
         noPrizeDraws,
         remainingPrizes: remaining._sum.quantityRemaining ?? 0,
         activePrizes,
-        participants: totalDraws,
+        participants,
       },
     });
   } catch (error) {

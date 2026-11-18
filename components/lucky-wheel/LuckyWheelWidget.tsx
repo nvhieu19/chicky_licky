@@ -18,7 +18,8 @@ type WheelPrize = {
 
 type WheelDraw = {
   id: string;
-  resultType: "PRIZE" | "NO_PRIZE";
+  spinNumber: number;
+  resultType: "PRIZE" | "NO_PRIZE" | "EXTRA_SPIN";
   prizeName: string;
   prizeImage: string | null;
   winRateBps: number;
@@ -33,6 +34,7 @@ type WheelStatus = {
   requiresLogin: boolean;
   isEligible: boolean;
   hasDrawn: boolean;
+  nextSpinNumber: number | null;
   draw: WheelDraw | null;
   settings: {
     title: string;
@@ -160,7 +162,11 @@ export default function LuckyWheelWidget() {
     setError("");
     setSpinning(true);
     try {
-      const response = await fetch("/api/lucky-wheel/spin", { method: "POST" });
+      const response = await fetch("/api/lucky-wheel/spin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ spinNumber: status.nextSpinNumber }),
+      });
       const data = await response.json();
       if (!response.ok) {
         setSpinning(false);
@@ -236,7 +242,14 @@ export default function LuckyWheelWidget() {
         setPendingResult(null);
       }, 6100);
       setStatus((current) =>
-        current ? { ...current, isEligible: false, hasDrawn: true } : current
+        current
+          ? {
+              ...current,
+              isEligible: Boolean(data.canSpinAgain),
+              nextSpinNumber: data.nextSpinNumber ?? null,
+              hasDrawn: true,
+            }
+          : current
       );
     } catch (spinError) {
       console.error("Lucky wheel spin request error:", spinError);
@@ -352,7 +365,9 @@ export default function LuckyWheelWidget() {
         }}
         aria-label={
           status.hasDrawn
-            ? "Xem lại phần thưởng vòng quay"
+            ? status.nextSpinNumber === 2
+              ? "Sử dụng lượt quay thưởng thêm"
+              : "Xem lại phần thưởng vòng quay"
             : currentUser
               ? "Mở vòng quay may mắn, bạn có một lượt quay"
               : "Mở vòng quay may mắn"
@@ -364,7 +379,13 @@ export default function LuckyWheelWidget() {
         </span>
         <span className="lucky-wheel-float-copy">
           <strong>QUÀ TẶNG MAY MẮN</strong>
-          <small>{status.hasDrawn ? "Xem phần quà" : "1 LƯỢT QUAY"}</small>
+          <small>
+            {status.nextSpinNumber === 2
+              ? "THÊM 1 LƯỢT"
+              : status.hasDrawn
+                ? "XEM PHẦN QUÀ"
+                : "1 LƯỢT QUAY"}
+          </small>
         </span>
         <Sparkles className="lucky-wheel-float-spark" aria-hidden="true" />
       </button>
@@ -415,7 +436,7 @@ export default function LuckyWheelWidget() {
 
                 {result ? (
                   <div className="lucky-wheel-result">
-                    {result.resultType === "PRIZE" && (
+                    {result.resultType !== "NO_PRIZE" && (
                       <div className="lucky-wheel-confetti" aria-hidden="true">
                         {Array.from({ length: 18 }, (_, index) => (
                           <i
@@ -429,10 +450,12 @@ export default function LuckyWheelWidget() {
                       </div>
                     )}
                     <p className="lucky-wheel-result-kicker">
-                      {result.resultType === "PRIZE" ? "CHÚC MỪNG BẠN!" : "CẢM ƠN BẠN ĐÃ THAM GIA"}
+                      {result.resultType !== "NO_PRIZE"
+                        ? "CHÚC MỪNG BẠN!"
+                        : "CẢM ƠN BẠN ĐÃ THAM GIA"}
                     </p>
                     <h3>
-                      {result.resultType === "PRIZE"
+                      {result.resultType !== "NO_PRIZE"
                         ? `Bạn đã nhận được ${result.prizeName}`
                         : result.prizeName}
                     </h3>
@@ -446,15 +469,30 @@ export default function LuckyWheelWidget() {
                       />
                     )}
                     <p className="lucky-wheel-result-message">
-                      {result.resultType === "PRIZE"
-                        ? result.claimInstruction ||
-                          status.settings?.defaultClaimInstruction ||
-                          "Vui lòng liên hệ cửa hàng để nhận phần thưởng."
-                        : status.settings?.noPrizeMessage}
+                      {result.resultType === "EXTRA_SPIN"
+                        ? "Bạn nhận được thêm 1 lượt quay. Hãy quay tiếp ngay!"
+                        : result.resultType === "PRIZE"
+                          ? result.claimInstruction ||
+                            status.settings?.defaultClaimInstruction ||
+                            "Vui lòng liên hệ cửa hàng để nhận phần thưởng."
+                          : status.settings?.noPrizeMessage}
                     </p>
-                    <button type="button" className="lucky-wheel-primary" onClick={closeModal}>
-                      ĐÓNG
-                    </button>
+                    {result.resultType === "EXTRA_SPIN" && status.nextSpinNumber === 2 ? (
+                      <button
+                        type="button"
+                        className="lucky-wheel-primary"
+                        onClick={() => {
+                          setResult(null);
+                          void spin();
+                        }}
+                      >
+                        QUAY THÊM 1 LƯỢT
+                      </button>
+                    ) : (
+                      <button type="button" className="lucky-wheel-primary" onClick={closeModal}>
+                        ĐÓNG
+                      </button>
+                    )}
                   </div>
                 ) : (
                   <div className="lucky-wheel-controls">
@@ -483,7 +521,9 @@ export default function LuckyWheelWidget() {
                     )}
                     <p className="lucky-wheel-help">
                       {currentUser
-                        ? "Mỗi tài khoản có duy nhất một lượt quay."
+                        ? status.nextSpinNumber === 2
+                          ? "Bạn đang sử dụng lượt quay thưởng thêm."
+                          : "Mỗi tài khoản có một lượt quay; có thể nhận thêm lượt từ phần thưởng."
                         : "Đăng nhập để kiểm tra và sử dụng lượt quay may mắn."}
                     </p>
                     {error && <p className="lucky-wheel-error">{error}</p>}

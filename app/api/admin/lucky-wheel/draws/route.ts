@@ -28,13 +28,15 @@ export async function GET(request: Request) {
       from === null ||
       to === null ||
       (from && to && from > to) ||
-      (resultType && !["PRIZE", "NO_PRIZE"].includes(resultType))
+      (resultType && !["PRIZE", "NO_PRIZE", "EXTRA_SPIN"].includes(resultType))
     ) {
       return NextResponse.json({ message: "Bộ lọc lịch sử không hợp lệ" }, { status: 400 });
     }
 
     const where = {
-      ...(resultType ? { resultType: resultType as "PRIZE" | "NO_PRIZE" } : {}),
+      ...(resultType
+        ? { resultType: resultType as "PRIZE" | "NO_PRIZE" | "EXTRA_SPIN" }
+        : {}),
       ...(prizeId ? { prizeId } : {}),
       ...(from || to
         ? {

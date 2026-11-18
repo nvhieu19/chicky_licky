@@ -72,7 +72,7 @@ npm run prisma:generate
 npm run prisma:push
 ```
 
-Repository này dùng `prisma db push` để đồng bộ schema và database hiện có chưa được baseline bằng Prisma Migrate. Lucky Wheel chỉ bổ sung model/enum; không chạy `prisma:seed` để cập nhật schema.
+Repository này dùng `prisma db push` để đồng bộ schema và database hiện có chưa được baseline bằng Prisma Migrate. Cập nhật Lucky Wheel bổ sung loại phần thưởng thêm lượt quay và cho phép lưu tối đa hai lượt quay cho mỗi tài khoản; không chạy `prisma:seed` để cập nhật schema.
 
 ## Chạy ở chế độ phát triển
 

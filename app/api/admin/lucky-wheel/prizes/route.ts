@@ -52,7 +52,8 @@ export async function POST(request: Request) {
         return tx.luckyWheelPrize.create({
           data: {
             ...parsed.data,
-            quantityRemaining: parsed.data.quantityTotal,
+            quantityTotal: parsed.data.type === "ITEM" ? parsed.data.quantityTotal : 0,
+            quantityRemaining: parsed.data.type === "ITEM" ? parsed.data.quantityTotal : 0,
           },
         });
       },

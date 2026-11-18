@@ -21,14 +21,36 @@ export async function GET() {
     ]);
     const user = account?.isActive ? account : null;
 
-    const draw =
+    const draws =
       user?.role === "USER"
-        ? await prisma.luckyWheelDraw.findUnique({ where: { userId: user.id } })
+        ? await prisma.luckyWheelDraw.findMany({
+            where: { userId: user.id },
+            orderBy: { spinNumber: "asc" },
+          })
+        : [];
+    const firstDraw = draws[0] ?? null;
+    const draw = draws[draws.length - 1] ?? null;
+    const hasBonusSpin = firstDraw?.resultType === "EXTRA_SPIN";
+    const hasUsedBonusSpin = draws.some((item) => item.spinNumber === 2);
+    const nextSpinNumber = !firstDraw
+      ? 1
+      : hasBonusSpin && !hasUsedBonusSpin
+        ? 2
         : null;
     const prizes =
       settings?.isEnabled && settings.showFloatingWidget
         ? await prisma.luckyWheelPrize.findMany({
-            where: { isActive: true, quantityRemaining: { gt: 0 } },
+            where: {
+              isActive: true,
+              ...(firstDraw
+                ? { type: "ITEM", quantityRemaining: { gt: 0 } }
+                : {
+                    OR: [
+                      { type: "EXTRA_SPIN" },
+                      { type: "ITEM", quantityRemaining: { gt: 0 } },
+                    ],
+                  }),
+            },
             orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }, { id: "asc" }],
             select: {
               id: true,
@@ -45,7 +67,7 @@ export async function GET() {
       throw new Error("Lucky wheel prize rates exceed 100%");
     }
     const claimInstruction =
-      draw?.prizeId && user?.role === "USER"
+      draw?.prizeId && draw.resultType === "PRIZE" && user?.role === "USER"
         ? (await prisma.luckyWheelPrize.findUnique({
             where: { id: draw.prizeId },
             select: { claimInstruction: true },
@@ -64,11 +86,13 @@ export async function GET() {
           }
         : null,
       requiresLogin: !user,
-      isEligible: user?.role === "USER" && !draw,
+      isEligible: user?.role === "USER" && nextSpinNumber !== null,
+      nextSpinNumber,
       hasDrawn: Boolean(draw),
       draw: draw
         ? {
             id: draw.id,
+            spinNumber: draw.spinNumber,
             prizeId: draw.prizeId,
             resultType: draw.resultType,
             prizeName: draw.prizeNameSnapshot || NO_PRIZE_NAME,

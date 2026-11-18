@@ -51,6 +51,12 @@ enum DeliveryType {
 enum LuckyWheelResultType {
   PRIZE
   NO_PRIZE
+  EXTRA_SPIN
+}
+
+enum LuckyWheelPrizeType {
+  ITEM
+  EXTRA_SPIN
 }
 
 model User {
@@ -67,7 +73,7 @@ model User {
 
   orders       Order[]
   carts        Cart[]
-  luckyWheelDraw LuckyWheelDraw?
+  luckyWheelDraw LuckyWheelDraw[]
 
   @@index([email])
   @@index([role])
@@ -88,6 +94,7 @@ model LuckyWheelSettings {
 model LuckyWheelPrize {
   id                String           @id @default(uuid())
   name              String           @db.VarChar(191)
+  type              LuckyWheelPrizeType @default(ITEM)
   description       String?          @db.Text
   imageUrl          String           @db.LongText
   quantityTotal     Int              @default(0)
@@ -105,7 +112,8 @@ model LuckyWheelPrize {
 
 model LuckyWheelDraw {
   id                    String                 @id @default(uuid())
-  userId                String                 @unique
+  userId                String
+  spinNumber            Int                    @default(1)
   prizeId               String?
   resultType            LuckyWheelResultType
   prizeNameSnapshot     String                 @db.VarChar(191)
@@ -115,6 +123,7 @@ model LuckyWheelDraw {
   user                  User                   @relation(fields: [userId], references: [id], onDelete: Restrict)
   prize                 LuckyWheelPrize?       @relation(fields: [prizeId], references: [id], onDelete: SetNull)
 
+  @@unique([userId, spinNumber])
   @@index([prizeId])
   @@index([resultType, createdAt])
   @@index([createdAt])

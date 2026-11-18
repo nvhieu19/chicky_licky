@@ -31,6 +31,7 @@ type SettingsForm = {
 type Prize = {
   id: string;
   name: string;
+  type: "ITEM" | "EXTRA_SPIN";
   description: string | null;
   imageUrl: string;
   quantityTotal: number;
@@ -44,6 +45,7 @@ type Prize = {
 
 type PrizeForm = {
   name: string;
+  type: "ITEM" | "EXTRA_SPIN";
   description: string;
   imageUrl: string;
   quantityTotal: string;
@@ -55,7 +57,7 @@ type PrizeForm = {
 
 type Draw = {
   id: string;
-  resultType: "PRIZE" | "NO_PRIZE";
+  resultType: "PRIZE" | "NO_PRIZE" | "EXTRA_SPIN";
   prizeNameSnapshot: string;
   prizeImageSnapshot: string | null;
   winRateBpsSnapshot: number;
@@ -74,6 +76,7 @@ const initialSettings: SettingsForm = {
 
 const emptyPrize: PrizeForm = {
   name: "",
+  type: "ITEM",
   description: "",
   imageUrl: "",
   quantityTotal: "0",
@@ -138,7 +141,11 @@ export default function LuckyWheelAdminPage() {
   const availableWinRate = useMemo(
     () =>
       prizes
-        .filter((prize) => prize.isActive && prize.quantityRemaining > 0)
+        .filter(
+          (prize) =>
+            prize.isActive &&
+            (prize.type === "EXTRA_SPIN" || prize.quantityRemaining > 0)
+        )
         .reduce((sum, prize) => sum + prize.winRateBps, 0),
     [prizes]
   );
@@ -213,6 +220,7 @@ export default function LuckyWheelAdminPage() {
     setEditing(prize);
     setForm({
       name: prize.name,
+      type: prize.type,
       description: prize.description ?? "",
       imageUrl: prize.imageUrl,
       quantityTotal: String(prize.quantityTotal),
@@ -268,9 +276,10 @@ export default function LuckyWheelAdminPage() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             name: form.name,
+            type: form.type,
             description: form.description || null,
             imageUrl: form.imageUrl,
-            quantityTotal: Number(form.quantityTotal),
+            quantityTotal: form.type === "ITEM" ? Number(form.quantityTotal) : 0,
             winRateBps,
             claimInstruction: form.claimInstruction || null,
             sortOrder: Number(form.sortOrder),
@@ -466,8 +475,12 @@ export default function LuckyWheelAdminPage() {
                         </div>
                       </td>
                       <td className="px-3 py-3 font-bold text-gray-700">
-                        {prize.quantityRemaining.toLocaleString("vi-VN")}
-                        <span className="font-normal text-gray-400"> / {prize.quantityTotal.toLocaleString("vi-VN")}</span>
+                        {prize.type === "EXTRA_SPIN"
+                          ? "Không giới hạn"
+                          : <>
+                              {prize.quantityRemaining.toLocaleString("vi-VN")}
+                              <span className="font-normal text-gray-400"> / {prize.quantityTotal.toLocaleString("vi-VN")}</span>
+                            </>}
                       </td>
                       <td className="px-3 py-3 font-black text-primary">{formatRate(prize.winRateBps)}</td>
                       <td className="px-3 py-3 font-bold text-gray-700">{prize._count.draws}</td>
@@ -537,6 +550,7 @@ export default function LuckyWheelAdminPage() {
               >
                 <option value="">Tất cả kết quả</option>
                 <option value="PRIZE">Trúng thưởng</option>
+                <option value="EXTRA_SPIN">Thêm lượt quay</option>
                 <option value="NO_PRIZE">Không trúng</option>
               </select>
               <select
@@ -587,13 +601,21 @@ export default function LuckyWheelAdminPage() {
                       <td className="px-3 py-3 font-bold text-gray-700">{draw.prizeNameSnapshot}</td>
                       <td className="px-3 py-3">
                         <span className={`rounded-full px-2.5 py-1 text-[10px] font-black ${
-                          draw.resultType === "PRIZE" ? "bg-emerald-50 text-emerald-700" : "bg-gray-100 text-gray-600"
+                          draw.resultType !== "NO_PRIZE"
+                            ? "bg-emerald-50 text-emerald-700"
+                            : "bg-gray-100 text-gray-600"
                         }`}>
-                          {draw.resultType === "PRIZE" ? "TRÚNG THƯỞNG" : "KHÔNG TRÚNG"}
+                          {draw.resultType === "EXTRA_SPIN"
+                            ? "THÊM LƯỢT QUAY"
+                            : draw.resultType === "PRIZE"
+                              ? "TRÚNG THƯỞNG"
+                              : "KHÔNG TRÚNG"}
                         </span>
                       </td>
                       <td className="px-3 py-3 font-bold text-gray-700">
-                        {draw.resultType === "PRIZE" ? formatRate(draw.winRateBpsSnapshot) : "—"}
+                        {draw.resultType !== "NO_PRIZE"
+                          ? formatRate(draw.winRateBpsSnapshot)
+                          : "—"}
                       </td>
                       <td className="px-3 py-3 text-gray-500">{formatDate(draw.createdAt)}</td>
                     </tr>
@@ -722,6 +744,36 @@ export default function LuckyWheelAdminPage() {
 
             <div className="grid gap-4 sm:grid-cols-2">
               <label className="space-y-1.5 sm:col-span-2">
+                <span className="text-xs font-bold text-gray-700">Loại phần thưởng *</span>
+                <select
+                  value={form.type}
+                  onChange={(event) => {
+                    const type = event.target.value as PrizeForm["type"];
+                    setForm((current) => ({
+                      ...current,
+                      type,
+                      name:
+                        type === "EXTRA_SPIN" && !current.name.trim()
+                          ? "Thêm 1 lượt quay"
+                          : current.name,
+                      quantityTotal:
+                        type === "ITEM" && current.quantityTotal === "0"
+                          ? "1"
+                          : current.quantityTotal,
+                    }));
+                  }}
+                  className="w-full rounded-xl border border-gray-200 px-3.5 py-2.5 text-sm"
+                >
+                  <option value="ITEM">Quà tặng thông thường</option>
+                  <option value="EXTRA_SPIN">Thêm 1 lượt quay</option>
+                </select>
+                {form.type === "EXTRA_SPIN" && (
+                  <small className="block text-[10px] text-gray-500">
+                    Người trúng được quay thêm một lần; lượt quay thêm không thể nhận tiếp phần thưởng này.
+                  </small>
+                )}
+              </label>
+              <label className="space-y-1.5 sm:col-span-2">
                 <span className="text-xs font-bold text-gray-700">Tên phần thưởng *</span>
                 <input
                   value={form.name}
@@ -749,24 +801,26 @@ export default function LuckyWheelAdminPage() {
                   idPrefix="lucky-wheel-prize"
                 />
               </div>
-              <label className="space-y-1.5">
-                <span className="text-xs font-bold text-gray-700">Tổng số lượng *</span>
-                <input
-                  type="number"
-                  min={editing ? editing.quantityTotal - editing.quantityRemaining : 0}
-                  max={1_000_000}
-                  step={1}
-                  value={form.quantityTotal}
-                  onChange={(event) => setForm((current) => ({ ...current, quantityTotal: event.target.value }))}
-                  required
-                  className="w-full rounded-xl border border-gray-200 px-3.5 py-2.5 text-sm"
-                />
-                {editing && (
-                  <small className="block text-[10px] text-gray-400">
-                    Đã phát {editing.quantityTotal - editing.quantityRemaining}; số lượng tổng không thể thấp hơn.
-                  </small>
-                )}
-              </label>
+              {form.type === "ITEM" && (
+                <label className="space-y-1.5">
+                  <span className="text-xs font-bold text-gray-700">Tổng số lượng *</span>
+                  <input
+                    type="number"
+                    min={editing?.type === "ITEM" ? editing.quantityTotal - editing.quantityRemaining : 0}
+                    max={1_000_000}
+                    step={1}
+                    value={form.quantityTotal}
+                    onChange={(event) => setForm((current) => ({ ...current, quantityTotal: event.target.value }))}
+                    required
+                    className="w-full rounded-xl border border-gray-200 px-3.5 py-2.5 text-sm"
+                  />
+                  {editing?.type === "ITEM" && (
+                    <small className="block text-[10px] text-gray-400">
+                      Đã phát {editing.quantityTotal - editing.quantityRemaining}; số lượng tổng không thể thấp hơn.
+                    </small>
+                  )}
+                </label>
+              )}
               <label className="space-y-1.5">
                 <span className="text-xs font-bold text-gray-700">Tỷ lệ trúng (%) *</span>
                 <input

@@ -32,11 +32,13 @@ export async function PUT(request: Request, { params }: RouteContext) {
             where: { isActive: true, id: { not: id } },
             _sum: { winRateBps: true },
           }),
-          tx.luckyWheelDraw.count({
-            where: { prizeId: id, resultType: "PRIZE" },
-          }),
+          parsed.data.type === "ITEM"
+            ? tx.luckyWheelDraw.count({
+                where: { prizeId: id, resultType: "PRIZE" },
+              })
+            : Promise.resolve(0),
         ]);
-        if (parsed.data.quantityTotal < issued) {
+        if (parsed.data.type === "ITEM" && parsed.data.quantityTotal < issued) {
           throw new Error("STOCK_BELOW_AWARDED");
         }
         const prospectiveTotal = (rates._sum.winRateBps ?? 0) +
@@ -48,7 +50,9 @@ export async function PUT(request: Request, { params }: RouteContext) {
           where: { id },
           data: {
             ...parsed.data,
-            quantityRemaining: parsed.data.quantityTotal - issued,
+            quantityTotal: parsed.data.type === "ITEM" ? parsed.data.quantityTotal : 0,
+            quantityRemaining:
+              parsed.data.type === "ITEM" ? parsed.data.quantityTotal - issued : 0,
           },
         });
       },

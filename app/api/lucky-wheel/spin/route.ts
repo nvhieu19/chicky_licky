@@ -6,6 +6,8 @@ import {
   LUCKY_WHEEL_SETTINGS_ID,
   LUCKY_WHEEL_TOTAL_BPS,
   NO_PRIZE_NAME,
+  luckyWheelSpinSchema,
+  readLuckyWheelBody,
 } from "@/lib/lucky-wheel";
 import prisma from "@/lib/prisma";
 
@@ -18,6 +20,7 @@ function isPrismaCode(error: unknown, code: string) {
 
 function serializeDraw(draw: {
   id: string;
+  spinNumber: number;
   prizeId: string | null;
   resultType: LuckyWheelResultType;
   prizeNameSnapshot: string;
@@ -27,6 +30,7 @@ function serializeDraw(draw: {
 }) {
   return {
     id: draw.id,
+    spinNumber: draw.spinNumber,
     prizeId: draw.prizeId,
     resultType: draw.resultType,
     prizeName: draw.prizeNameSnapshot,
@@ -36,12 +40,19 @@ function serializeDraw(draw: {
   };
 }
 
-export async function POST() {
+export async function POST(request: Request) {
   const session = await getSession();
   if (!session?.userId) {
     return NextResponse.json({ message: "Vui lòng đăng nhập để quay" }, { status: 401 });
   }
   const userId = session.userId;
+  const parsedRequest = luckyWheelSpinSchema.safeParse(
+    (await readLuckyWheelBody(request)) ?? {}
+  );
+  if (!parsedRequest.success) {
+    return NextResponse.json({ message: "Lượt quay không hợp lệ" }, { status: 400 });
+  }
+  const requestedSpinNumber = parsedRequest.data.spinNumber;
 
   try {
     const result = await prisma.$transaction(
@@ -53,16 +64,34 @@ export async function POST() {
         if (!user?.isActive) throw new Error("ACCOUNT_INACTIVE");
         if (user.role !== "USER") throw new Error("ACCOUNT_NOT_ALLOWED");
 
-        const previousDraw = await tx.luckyWheelDraw.findUnique({
+        const previousDraws = await tx.luckyWheelDraw.findMany({
           where: { userId },
+          orderBy: { spinNumber: "asc" },
         });
-        if (previousDraw) {
+        const firstDraw = previousDraws[0];
+        const existingDraw = previousDraws.find(
+          (draw) => draw.spinNumber === requestedSpinNumber
+        );
+        if (existingDraw) {
+          const canSpinAgain =
+            requestedSpinNumber === 1 &&
+            existingDraw.resultType === LuckyWheelResultType.EXTRA_SPIN &&
+            !previousDraws.some((draw) => draw.spinNumber === 2);
           return {
-            draw: serializeDraw(previousDraw),
+            draw: serializeDraw(existingDraw),
+            canSpinAgain,
+            nextSpinNumber: canSpinAgain ? 2 : null,
             replayed: true,
             wheelSegments: null,
           };
         }
+        if (
+          requestedSpinNumber === 2 &&
+          firstDraw?.resultType !== LuckyWheelResultType.EXTRA_SPIN
+        ) {
+          throw new Error("NO_SPINS_LEFT");
+        }
+        const spinNumber = requestedSpinNumber;
 
         const settings = await tx.luckyWheelSettings.findUnique({
           where: { id: LUCKY_WHEEL_SETTINGS_ID },
@@ -73,13 +102,24 @@ export async function POST() {
         }
 
         const prizes = await tx.luckyWheelPrize.findMany({
-          where: { isActive: true, quantityRemaining: { gt: 0 } },
+          where: {
+            isActive: true,
+            ...(spinNumber === 1
+              ? {
+                  OR: [
+                    { type: "EXTRA_SPIN" },
+                    { type: "ITEM", quantityRemaining: { gt: 0 } },
+                  ],
+                }
+              : { type: "ITEM", quantityRemaining: { gt: 0 } }),
+          },
           orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }, { id: "asc" }],
           select: {
             id: true,
             name: true,
             imageUrl: true,
             winRateBps: true,
+            type: true,
             claimInstruction: true,
             quantityRemaining: true,
           },
@@ -120,7 +160,7 @@ export async function POST() {
           }) ?? null;
 
         let wonPrize = selectedPrize;
-        if (selectedPrize) {
+        if (selectedPrize?.type === "ITEM") {
           const reserved = await tx.luckyWheelPrize.updateMany({
             where: {
               id: selectedPrize.id,
@@ -135,9 +175,12 @@ export async function POST() {
         const draw = await tx.luckyWheelDraw.create({
           data: {
             userId: user.id,
+            spinNumber,
             prizeId: wonPrize?.id ?? null,
             resultType: wonPrize
-              ? LuckyWheelResultType.PRIZE
+              ? wonPrize.type === "EXTRA_SPIN"
+                ? LuckyWheelResultType.EXTRA_SPIN
+                : LuckyWheelResultType.PRIZE
               : LuckyWheelResultType.NO_PRIZE,
             prizeNameSnapshot: wonPrize?.name ?? NO_PRIZE_NAME,
             prizeImageSnapshot: wonPrize?.imageUrl ?? null,
@@ -149,8 +192,14 @@ export async function POST() {
           draw: {
             ...serializeDraw(draw),
             claimInstruction:
-              wonPrize?.claimInstruction || settings.defaultClaimInstruction || "",
+              wonPrize?.type === "ITEM"
+                ? wonPrize.claimInstruction || settings.defaultClaimInstruction || ""
+                : "",
           },
+          canSpinAgain:
+            spinNumber === 1 && wonPrize?.type === "EXTRA_SPIN",
+          nextSpinNumber:
+            spinNumber === 1 && wonPrize?.type === "EXTRA_SPIN" ? 2 : null,
           replayed: false,
           wheelSegments,
         };
@@ -169,14 +218,18 @@ export async function POST() {
     if (error instanceof Error && error.message === "WHEEL_DISABLED") {
       return NextResponse.json({ message: "Vòng quay hiện đang tạm đóng" }, { status: 409 });
     }
+    if (error instanceof Error && error.message === "NO_SPINS_LEFT") {
+      return NextResponse.json({ message: "Tài khoản không còn lượt quay" }, { status: 409 });
+    }
     if (error instanceof Error && error.message === "INVALID_WHEEL_CONFIGURATION") {
       console.error("Lucky wheel rates exceed the configured limit");
       return NextResponse.json({ message: "Cấu hình vòng quay không hợp lệ" }, { status: 500 });
     }
     if (isPrismaCode(error, "P2002") || isPrismaCode(error, "P2034")) {
       try {
-        const previousDraw = await prisma.luckyWheelDraw.findUnique({
+        const previousDraw = await prisma.luckyWheelDraw.findFirst({
           where: { userId },
+          orderBy: { spinNumber: "desc" },
         });
         if (previousDraw) {
           return NextResponse.json({

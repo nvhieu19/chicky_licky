@@ -38,8 +38,13 @@ export const luckyWheelSettingsSchema = z.object({
   showFloatingWidget: z.boolean(),
 });
 
+export const luckyWheelSpinSchema = z.object({
+  spinNumber: z.number().int().min(1).max(2).default(1),
+});
+
 export const luckyWheelPrizeSchema = z.object({
   name: z.string().trim().min(1, "Vui lòng nhập tên phần thưởng").max(191),
+  type: z.enum(["ITEM", "EXTRA_SPIN"]).default("ITEM"),
   description: z.string().trim().max(5000).nullable(),
   imageUrl: imageUrlSchema,
   quantityTotal: z.number().int().min(0).max(1_000_000),
