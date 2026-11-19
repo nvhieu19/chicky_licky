@@ -66,7 +66,7 @@ export default function ProductCard({
   };
 
   return (
-    <div className="group h-full bg-white rounded-2xl border border-gray-100 shadow-sm hover:-translate-y-1 hover:shadow-xl hover:border-red-100 transition-all duration-300 overflow-hidden flex flex-col justify-between">
+    <div className="liquid-glass liquid-glass-interactive group h-full rounded-2xl overflow-hidden flex flex-col justify-between">
       {/* Clickable Image & Badges */}
       <Link href={`/menu/${slug}`} className="block relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-orange-50 via-amber-50 to-rose-50">
         <Image

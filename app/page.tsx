@@ -72,7 +72,7 @@ export default async function HomePage() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
           {/* Left Hero Card: Membership Greeting */}
-          <div className="lg:col-span-4 bg-gradient-to-b from-[#E60028] to-[#B0001D] text-white rounded-3xl p-7 flex flex-col justify-between shadow-xl shadow-red-200/50 relative overflow-hidden min-h-[360px]">
+          <div className="liquid-glass-red lg:col-span-4 text-white rounded-3xl p-7 flex flex-col justify-between relative overflow-hidden min-h-[360px]">
             {/* Background pattern */}
             <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full blur-2xl pointer-events-none" />
             <div className="absolute bottom-0 left-0 w-32 h-32 bg-secondary/20 rounded-full blur-xl pointer-events-none" />
@@ -107,7 +107,7 @@ export default async function HomePage() {
 
           {/* Right Hero Banner: Custom Banner from Admin or Welcome Card */}
           {banners && banners.length > 0 ? (
-            <div className="lg:col-span-8 relative rounded-3xl overflow-hidden min-h-[360px] shadow-sm border border-gray-100 bg-gray-50 flex items-center justify-center">
+            <div className="liquid-glass lg:col-span-8 relative rounded-3xl overflow-hidden min-h-[360px] flex items-center justify-center">
               <Link href={banners[0].link || "/menu"} className="block w-full h-full relative aspect-[16/8] sm:aspect-[2/1]">
                 <Image
                   src={banners[0].imageUrl}
@@ -120,7 +120,7 @@ export default async function HomePage() {
               </Link>
             </div>
           ) : (
-            <div className="lg:col-span-8 bg-gradient-to-br from-[#FFF5DC] via-[#FFF9ED] to-[#FFF0D4] border-2 border-amber-200 rounded-3xl p-6 sm:p-8 flex flex-col justify-between shadow-sm relative overflow-hidden">
+            <div className="liquid-glass lg:col-span-8 rounded-3xl p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden">
               {/* Top row */}
               <div className="flex flex-wrap items-center justify-between gap-3 relative z-10">
                 <div className="flex items-center gap-2">
@@ -132,7 +132,7 @@ export default async function HomePage() {
                   </span>
                 </div>
 
-                <div className="flex items-center gap-2 px-3 py-1.5 bg-secondary text-gray-900 rounded-xl font-black text-xs shadow-sm">
+                <div className="liquid-glass-gold flex items-center gap-2 px-3 py-1.5 text-gray-900 rounded-xl font-black text-xs">
                   <Clock className="w-4 h-4" />
                   <span>Mở cửa: 08:00 - 22:30 mỗi ngày</span>
                 </div>
@@ -189,7 +189,7 @@ export default async function HomePage() {
               <Link
                 key={cat.id}
                 href={`/menu?category=${cat.slug}`}
-                className="group bg-white rounded-2xl p-3 border border-gray-100 shadow-sm hover:shadow-md hover:border-red-200 transition-all text-center flex flex-col items-center justify-center"
+                className="liquid-glass liquid-glass-interactive group rounded-2xl p-3 text-center flex flex-col items-center justify-center"
               >
                 <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden mb-2.5 bg-gray-50 border-2 border-gray-100 group-hover:border-primary transition-colors flex items-center justify-center">
                   {cat.imageUrl ? (
@@ -289,7 +289,7 @@ export default async function HomePage() {
               <Link
                 key={promo.id}
                 href={`/promotions/${promo.slug}`}
-                className="group bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl hover:border-red-100 transition-all overflow-hidden flex flex-col justify-between"
+                className="liquid-glass liquid-glass-interactive group rounded-3xl overflow-hidden flex flex-col justify-between"
               >
                 <div>
                   <div className="relative aspect-[16/9] overflow-hidden bg-gray-50">
@@ -371,7 +371,7 @@ export default async function HomePage() {
 
       {/* 4. Quality & Commitment Banner */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-100 shadow-sm grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+        <div className="liquid-glass rounded-3xl p-6 sm:p-8 grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
           <div className="flex flex-col items-center">
             <div className="w-12 h-12 rounded-2xl bg-red-50 text-primary flex items-center justify-center mb-3">
               <Award className="w-6 h-6" />

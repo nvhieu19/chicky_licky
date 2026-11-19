@@ -57,11 +57,11 @@ export default function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-white transition-shadow duration-200">
+    <header className="liquid-glass-header sticky top-0 z-40 w-full transition-shadow duration-200">
       {/* 1. Main Navigation Bar */}
       <div
         className={`w-full border-b border-gray-100 ${
-          isScrolled ? "shadow-sm bg-white/95 backdrop-blur-md" : "bg-white"
+          isScrolled ? "bg-white/70 backdrop-blur-xl" : "bg-white/45 backdrop-blur-xl"
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
@@ -89,7 +89,7 @@ export default function Header() {
             })}
           </nav>
 
-          {/* Right: Actions (Account, Bell, Cart, VN) */}
+          {/* Right: Account, notifications, and cart */}
           <div className="flex items-center gap-2 sm:gap-3">
             {/* Account Icon / Dropdown */}
             <div className="relative">
@@ -192,12 +192,6 @@ export default function Header() {
               )}
             </Link>
 
-            {/* Language Selector */}
-            <div className="hidden sm:flex items-center gap-1 px-2.5 py-1 rounded-full border border-gray-200 text-xs font-bold text-gray-700 cursor-pointer hover:bg-gray-50">
-              <span>VN</span>
-              <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
-            </div>
-
             {/* Mobile Menu Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -211,7 +205,7 @@ export default function Header() {
       </div>
 
       {/* 2. Yellow Announcement & Search Bar (Screenshot 1) */}
-      <div className="w-full bg-secondary py-2 px-4 sm:px-6 lg:px-8 border-b border-amber-400/50">
+      <div className="liquid-glass-gold w-full py-2 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2.5">
           {/* Left: Announcement text + Login/Register pill button */}
           <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 text-xs text-gray-900 font-bold">
