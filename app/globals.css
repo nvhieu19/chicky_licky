@@ -318,6 +318,17 @@ textarea {
   outline-offset: -1px;
 }
 
+.auth-mode-tab {
+  outline: none;
+  outline-offset: 0;
+}
+
+.auth-mode-tab:focus-visible {
+  outline: 2px solid rgb(235 25 57 / 70%);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
 .menu-card-enter {
   animation: menu-card-enter 420ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
 }

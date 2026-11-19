@@ -205,13 +205,13 @@ export default function AuthModal() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-2 backdrop-blur-md animate-in fade-in duration-200 sm:p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/50 p-2 backdrop-blur-md animate-in fade-in duration-200 sm:p-4">
       {/* Backdrop click area */}
       <div className="absolute inset-0" onClick={closeModal} />
 
       {/* Modal Dialog Card */}
       <div
-        className="relative z-10 flex max-h-[92dvh] w-full max-w-[840px] flex-col overflow-hidden rounded-3xl border border-white/80 bg-white/90 shadow-2xl backdrop-blur-2xl md:flex-row"
+        className="relative z-10 flex max-h-[92dvh] min-h-0 w-full max-w-[840px] flex-col overflow-hidden rounded-3xl border border-white/80 bg-white/90 shadow-2xl backdrop-blur-2xl md:flex-row"
         role="dialog"
         aria-modal="true"
         aria-labelledby="auth-modal-title"
@@ -226,7 +226,7 @@ export default function AuthModal() {
         </button>
 
         {/* Left Side: Form */}
-        <div className="w-full md:w-[52%] p-6 sm:p-8 flex flex-col justify-center overflow-y-auto">
+        <div className="min-h-0 w-full overscroll-contain overflow-y-auto p-6 sm:p-8 flex flex-col justify-center md:w-[52%]">
           {/* Brand Logo Header */}
           <div className="flex items-center gap-2 mb-4">
             <div className="relative w-10 h-10 rounded-xl overflow-hidden shadow-md shadow-red-200">
@@ -269,7 +269,7 @@ export default function AuthModal() {
                 setError(null);
                 setMode("login");
               }}
-              className={`pb-2 text-sm font-bold transition-all relative ${
+              className={`auth-mode-tab pb-2 text-sm font-bold transition-all relative ${
                 mode === "login"
                   ? "text-primary border-b-2 border-primary"
                   : "text-gray-400 hover:text-gray-600"
@@ -283,7 +283,7 @@ export default function AuthModal() {
                 setError(null);
                 setMode("register");
               }}
-              className={`pb-2 text-sm font-bold transition-all relative ${
+              className={`auth-mode-tab pb-2 text-sm font-bold transition-all relative ${
                 mode === "register"
                   ? "text-primary border-b-2 border-primary"
                   : "text-gray-400 hover:text-gray-600"
@@ -374,7 +374,7 @@ export default function AuthModal() {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                 <div>
                   <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
                     Email <span className="text-primary">*</span>
@@ -403,7 +403,7 @@ export default function AuthModal() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                 <div>
                   <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
                     Mật khẩu <span className="text-primary">*</span>
@@ -523,58 +523,58 @@ export default function AuthModal() {
               Giao hàng tận nơi 10 phút
             </div>
 
-            {openPolicy && (
-              <div
-                className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
-                onClick={() => setOpenPolicy(null)}
-              >
-                <section
-                  role="dialog"
-                  aria-modal="true"
-                  aria-labelledby="policy-title"
-                  className="relative z-10 w-full max-w-xl max-h-[85vh] bg-white rounded-2xl shadow-2xl flex flex-col"
-                  onClick={(event) => event.stopPropagation()}
-                >
-                  <header className="flex items-center justify-between gap-4 p-5 border-b border-gray-100">
-                    <h2 id="policy-title" className="text-lg font-black text-gray-900">
-                      {policies[openPolicy].title}
-                    </h2>
-                    <button
-                      type="button"
-                      onClick={() => setOpenPolicy(null)}
-                      aria-label="Đóng nội dung chính sách"
-                      className="p-2 rounded-full text-gray-500 hover:bg-gray-100 hover:text-gray-900"
-                    >
-                      <X className="w-5 h-5" />
-                    </button>
-                  </header>
-                  <div className="p-5 overflow-y-auto space-y-5 text-sm text-gray-600 leading-relaxed">
-                    <p>
-                      Nội dung dưới đây giải thích cách sử dụng dịch vụ và xử lý thông tin khi bạn dùng
-                      website Chicky Licky.
-                    </p>
-                    {policies[openPolicy].sections.map((section) => (
-                      <section key={section.heading} className="space-y-1">
-                        <h3 className="font-bold text-gray-900">{section.heading}</h3>
-                        <p>{section.text}</p>
-                      </section>
-                    ))}
-                  </div>
-                  <footer className="p-5 border-t border-gray-100 flex justify-end">
-                    <button
-                      type="button"
-                      onClick={() => setOpenPolicy(null)}
-                      className="px-5 py-2.5 rounded-xl bg-primary text-white text-sm font-bold hover:bg-primary-hover"
-                    >
-                      Đã hiểu
-                    </button>
-                  </footer>
-                </section>
-              </div>
-            )}
           </div>
         </div>
       </div>
+      {openPolicy && (
+        <div
+          className="fixed inset-0 z-[60] flex items-center justify-center overflow-y-auto p-4 bg-black/60 backdrop-blur-sm"
+          onClick={() => setOpenPolicy(null)}
+        >
+          <section
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="policy-title"
+            className="relative z-10 flex max-h-[85dvh] w-full max-w-xl flex-col rounded-2xl bg-white shadow-2xl"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <header className="flex items-center justify-between gap-4 border-b border-gray-100 p-5">
+              <h2 id="policy-title" className="text-lg font-black text-gray-900">
+                {policies[openPolicy].title}
+              </h2>
+              <button
+                type="button"
+                onClick={() => setOpenPolicy(null)}
+                aria-label="Đóng nội dung chính sách"
+                className="rounded-full p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </header>
+            <div className="space-y-5 overflow-y-auto p-5 text-sm leading-relaxed text-gray-600">
+              <p>
+                Nội dung dưới đây giải thích cách sử dụng dịch vụ và xử lý thông tin khi bạn dùng
+                website Chicky Licky.
+              </p>
+              {policies[openPolicy].sections.map((section) => (
+                <section key={section.heading} className="space-y-1">
+                  <h3 className="font-bold text-gray-900">{section.heading}</h3>
+                  <p>{section.text}</p>
+                </section>
+              ))}
+            </div>
+            <footer className="flex justify-end border-t border-gray-100 p-5">
+              <button
+                type="button"
+                onClick={() => setOpenPolicy(null)}
+                className="rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-white hover:bg-primary-hover"
+              >
+                Đã hiểu
+              </button>
+            </footer>
+          </section>
+        </div>
+      )}
     </div>
   );
 }
