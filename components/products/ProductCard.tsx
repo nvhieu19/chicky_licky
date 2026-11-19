@@ -19,7 +19,6 @@ export interface ProductCardProps {
   isNew?: boolean;
   isAvailable?: boolean;
   categoryName?: string;
-  imageAspect?: "square" | "landscape";
   onQuickView?: () => void;
   onAdded?: (productName: string) => void;
 }
@@ -36,7 +35,6 @@ export default function ProductCard({
   isNew,
   isAvailable = true,
   categoryName,
-  imageAspect = "landscape",
   onQuickView,
   onAdded,
 }: ProductCardProps) {
@@ -76,7 +74,7 @@ export default function ProductCard({
   return (
     <div className="liquid-glass liquid-glass-interactive menu-product-card group flex h-full flex-col justify-between overflow-hidden">
       {/* Clickable Image & Badges */}
-      <div className={`product-image-stage relative overflow-hidden bg-gradient-to-br from-orange-50 via-amber-50 to-rose-50 ${imageAspect === "square" ? "aspect-square sm:aspect-[4/3]" : "aspect-[4/3]"}`}>
+      <div className="product-image-stage relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-orange-50 via-amber-50 to-rose-50">
         <Link href={`/menu/${slug}`} className="relative z-[1] block h-full w-full">
           {imageError ? (
             <div className="flex h-full items-center justify-center text-primary/35">
@@ -135,24 +133,24 @@ export default function ProductCard({
       </div>
 
       {/* Product Content */}
-      <div className="menu-product-card-content flex flex-1 flex-col justify-between p-3.5 sm:p-4">
+      <div className="menu-product-card-content flex flex-1 flex-col justify-between p-2.5 sm:p-4">
         <div>
           <Link href={`/menu/${slug}`} className="block group-hover:text-primary transition-colors">
-            <h3 className="line-clamp-2 text-[13px] font-extrabold leading-snug tracking-[-0.01em] text-gray-900 sm:text-sm">
+            <h3 className="line-clamp-2 min-h-[2.5em] text-[13px] font-black leading-snug tracking-[-0.01em] text-gray-900 sm:text-sm">
               {name}
             </h3>
           </Link>
           {shortDescription && (
-            <p className="mt-1.5 line-clamp-2 text-[11px] leading-relaxed text-gray-500 sm:text-xs">
+            <p className="mt-1.5 hidden line-clamp-2 text-[11px] leading-relaxed text-gray-500 sm:block sm:text-xs">
               {shortDescription}
             </p>
           )}
         </div>
 
         {/* Price & CTA Button */}
-        <div className="mt-3 flex items-center justify-between gap-2 border-t border-gray-900/[0.045] pt-3.5 sm:mt-4 sm:pt-4">
+        <div className="mt-2.5 flex items-center justify-between gap-2 rounded-xl border border-primary/10 bg-gradient-to-r from-rose-50 via-white to-amber-50/70 px-2.5 py-2 sm:mt-4 sm:px-3 sm:py-2.5">
           <div className="flex flex-col">
-            <span className="text-[15px] font-black tracking-tight text-primary sm:text-base">
+            <span className="text-sm font-black tracking-tight text-primary sm:text-base">
               {formatPrice(currentPrice)}
             </span>
             {hasDiscount && (
@@ -165,7 +163,7 @@ export default function ProductCard({
           <button
             onClick={handleAdd}
             disabled={!isAvailable}
-            className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full font-bold transition-all duration-200 hover:scale-[1.04] active:scale-95 cursor-pointer ${
+            className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full font-bold transition-all duration-200 hover:scale-[1.04] active:scale-95 cursor-pointer sm:h-11 sm:w-11 ${
               added
                 ? "bg-green-600 text-white shadow-md shadow-green-200/70"
                 : isAvailable
