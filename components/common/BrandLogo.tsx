@@ -8,6 +8,7 @@ interface BrandLogoProps {
   showSlogan?: boolean;
   href?: string;
   className?: string;
+  sloganClassName?: string;
   imageSrc?: string;
 }
 
@@ -17,6 +18,7 @@ export default function BrandLogo({
   showSlogan = true,
   href = "/",
   className = "",
+  sloganClassName = "",
   imageSrc = "/logo.png",
 }: BrandLogoProps) {
   const isWhite = variant === "white";
@@ -70,7 +72,7 @@ export default function BrandLogo({
         </span>
         {showSlogan && (
           <span
-            className={`${sizeStyles.slogan} font-black tracking-widest uppercase mt-0.5 ${
+            className={`${sizeStyles.slogan} font-black tracking-widest uppercase mt-0.5 ${sloganClassName} ${
               isWhite ? "text-secondary" : "text-secondary-hover"
             }`}
           >

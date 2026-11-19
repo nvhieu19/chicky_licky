@@ -74,23 +74,24 @@ export default function ProductCard({
   return (
     <div className="liquid-glass liquid-glass-interactive group h-full rounded-2xl overflow-hidden flex flex-col justify-between">
       {/* Clickable Image & Badges */}
-      <Link href={`/menu/${slug}`} className="block relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-orange-50 via-amber-50 to-rose-50">
-        {imageError ? (
-          <div className="flex h-full items-center justify-center text-primary/35">
-            <UtensilsCrossed className="h-12 w-12" aria-hidden="true" />
-            <span className="sr-only">Không thể tải ảnh {name}</span>
-          </div>
-        ) : (
-          <Image
-            src={imageUrl}
-            alt={name}
-            fill
-            unoptimized={imageUrl?.startsWith("data:")}
-            sizes="(max-width: 359px) 100vw, (max-width: 640px) 50vw, (max-width: 1024px) 50vw, 25vw"
-            onError={() => setImageError(true)}
-            className="object-contain p-2.5 transition-transform duration-500 group-hover:scale-[1.04] sm:p-3"
-          />
-        )}
+      <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-orange-50 via-amber-50 to-rose-50">
+        <Link href={`/menu/${slug}`} className="relative block h-full w-full">
+          {imageError ? (
+            <div className="flex h-full items-center justify-center text-primary/35">
+              <UtensilsCrossed className="h-12 w-12" aria-hidden="true" />
+              <span className="sr-only">Không thể tải ảnh {name}</span>
+            </div>
+          ) : (
+            <Image
+              src={imageUrl}
+              alt={name}
+              fill
+              unoptimized={imageUrl?.startsWith("data:")}
+              sizes="(max-width: 359px) 100vw, (max-width: 640px) 50vw, (max-width: 1024px) 50vw, 25vw"
+              onError={() => setImageError(true)}
+              className="object-contain p-2.5 transition-transform duration-500 group-hover:scale-[1.04] sm:p-3"
+            />
+          )}
 
         {/* Badges container */}
         <div className="absolute top-2.5 left-2.5 flex flex-col gap-1 z-10">
@@ -118,14 +119,11 @@ export default function ProductCard({
             </span>
           </div>
         )}
+        </Link>
         {onQuickView && (
           <button
             type="button"
-            onClick={(event) => {
-              event.preventDefault();
-              event.stopPropagation();
-              onQuickView();
-            }}
+            onClick={onQuickView}
             className="absolute bottom-2.5 right-2.5 z-10 inline-flex min-h-11 items-center gap-1.5 rounded-full border border-white/80 bg-white/90 px-3 text-[11px] font-black text-gray-800 shadow-lg backdrop-blur-xl transition-colors hover:bg-white sm:opacity-0 sm:group-hover:opacity-100"
             aria-label={`Xem nhanh ${name}`}
           >
@@ -133,7 +131,7 @@ export default function ProductCard({
             <span>Xem nhanh</span>
           </button>
         )}
-      </Link>
+      </div>
 
       {/* Product Content */}
       <div className="flex flex-1 flex-col justify-between p-3 sm:p-4">

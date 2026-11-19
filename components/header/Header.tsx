@@ -82,7 +82,7 @@ export default function Header() {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
           {/* Left: Brand Logo */}
-          <BrandLogo imageSrc="/logo.png" />
+          <BrandLogo imageSrc="/logo.png" className="header-brand" sloganClassName="max-[639px]:hidden" />
 
           {/* Center: Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-1 lg:gap-2">
@@ -106,14 +106,14 @@ export default function Header() {
           </nav>
 
           {/* Right: Account, notifications, and cart */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-0 sm:gap-3">
             {/* Account Icon / Dropdown */}
             <div className="relative">
               {currentUser ? (
                 <div className="relative">
                   <button
                     onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                    className="flex items-center gap-1.5 p-2 rounded-full hover:bg-gray-100 transition-colors text-gray-700 cursor-pointer"
+                    className="flex h-11 w-11 items-center justify-center rounded-full p-0 text-gray-700 transition-colors hover:bg-white/70 cursor-pointer sm:h-auto sm:w-auto sm:gap-1.5 sm:p-2"
                     title={currentUser.name}
                   >
                     <div className="w-8 h-8 rounded-full bg-red-100 text-primary font-bold flex items-center justify-center text-sm">
@@ -122,7 +122,7 @@ export default function Header() {
                     <span className="hidden lg:inline text-xs font-bold text-gray-800 max-w-[100px] truncate">
                       {currentUser.name}
                     </span>
-                    <ChevronDown className="w-3.5 h-3.5 text-gray-500" />
+                    <ChevronDown className="hidden h-3.5 w-3.5 text-gray-500 sm:block" />
                   </button>
 
                   {userDropdownOpen && (
@@ -186,7 +186,7 @@ export default function Header() {
             {/* Notification Bell */}
             <button
               onClick={() => alert("Chưa có thông báo mới!")}
-              className="relative flex h-11 w-11 items-center justify-center rounded-full text-gray-700 transition-colors hover:bg-white/70 cursor-pointer"
+              className="relative hidden h-11 w-11 items-center justify-center rounded-full text-gray-700 transition-colors hover:bg-white/70 cursor-pointer md:flex"
               title="Thông báo"
               aria-label="Thông báo"
             >
@@ -272,7 +272,7 @@ export default function Header() {
         <nav
           id="mobile-navigation"
           aria-label="Điều hướng trên điện thoại"
-          className="liquid-glass fixed left-3 right-3 top-[7rem] z-[60] max-h-[calc(100dvh-8rem)] space-y-2 overflow-y-auto rounded-3xl p-4 shadow-2xl md:hidden"
+          className="liquid-glass mobile-navigation-panel fixed left-3 right-3 top-[7rem] z-[60] max-h-[calc(100dvh-8rem)] space-y-2 overflow-y-auto rounded-3xl p-4 shadow-2xl md:hidden"
         >
           {navLinks.map((link) => {
             const isActive =
