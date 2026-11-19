@@ -91,7 +91,7 @@ export default async function ProductDetailPage({ params }: Props) {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+    <div className="max-w-7xl mx-auto space-y-12 px-4 pb-24 py-6 sm:px-6 sm:py-8 sm:pb-8 lg:px-8">
       {/* Back button */}
       <div>
         <Link
@@ -103,10 +103,10 @@ export default async function ProductDetailPage({ params }: Props) {
       </div>
 
       {/* Product Detail Layout */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 bg-white rounded-3xl p-6 sm:p-10 border border-gray-100 shadow-sm">
+      <div className="liquid-glass grid grid-cols-1 gap-6 rounded-3xl p-4 sm:gap-8 sm:p-8 md:grid-cols-12 lg:gap-12 lg:p-10">
         {/* Left: Product Image */}
         <div className="md:col-span-6 flex flex-col justify-center">
-          <div className="relative w-full aspect-square rounded-2xl overflow-hidden bg-gray-50 border border-gray-100 shadow-inner">
+          <div className="relative aspect-square w-full overflow-hidden rounded-2xl border border-white/80 bg-gradient-to-br from-orange-50 via-amber-50 to-rose-50 shadow-inner">
             <Image
               src={product.imageUrl}
               alt={product.name}
@@ -114,7 +114,7 @@ export default async function ProductDetailPage({ params }: Props) {
               priority
               unoptimized={product.imageUrl?.startsWith("data:")}
               sizes="(max-width: 768px) 100vw, 50vw"
-              className="object-cover"
+              className="object-contain p-4 sm:p-8"
             />
             {product.isBestSeller && (
               <span className="absolute top-4 left-4 px-3 py-1 bg-primary text-white text-xs font-black uppercase rounded-lg shadow-md tracking-wider">

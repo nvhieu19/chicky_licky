@@ -69,7 +69,7 @@ export default async function PromotionsPage() {
 
       {/* Promotions list */}
       {promotions.length === 0 ? (
-        <div className="bg-white rounded-3xl p-16 text-center border border-gray-100 shadow-sm max-w-lg mx-auto space-y-3">
+        <div className="liquid-glass mx-auto max-w-lg space-y-3 rounded-3xl p-8 text-center sm:p-16">
           <div className="w-16 h-16 rounded-full bg-red-50 text-primary flex items-center justify-center mx-auto">
             <Gift className="w-8 h-8" />
           </div>
@@ -90,7 +90,7 @@ export default async function PromotionsPage() {
           {promotions.map((promo) => (
             <div
               key={promo.id}
-              className="group bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl hover:border-red-100 transition-all overflow-hidden flex flex-col"
+              className="liquid-glass liquid-glass-interactive group overflow-hidden rounded-3xl flex flex-col"
             >
               {/* Image */}
               <div className="relative aspect-[16/10] overflow-hidden bg-gray-50">

@@ -48,7 +48,8 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
   };
 
   return (
-    <div className="space-y-5 bg-gray-50/70 p-5 rounded-2xl border border-gray-100">
+    <>
+    <div className="liquid-glass space-y-5 rounded-2xl p-4 sm:p-5">
       {/* Price section */}
       <div className="flex items-baseline gap-3">
         <span className="text-3xl font-black text-primary">
@@ -115,5 +116,23 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
         </button>
       </div>
     </div>
+    <div className="product-detail-mobile-cta sm:hidden">
+      <div className="min-w-0">
+        <span className="block text-[10px] font-bold uppercase tracking-wider text-gray-500">Tổng cộng</span>
+        <span className="block truncate text-base font-black text-primary">{formatPrice(totalPrice)}</span>
+      </div>
+      <button
+        type="button"
+        onClick={handleAddToCart}
+        disabled={!product.isAvailable}
+        className={`flex min-h-12 flex-1 items-center justify-center gap-2 rounded-xl px-4 text-xs font-black text-white shadow-lg shadow-red-200/50 transition-all active:scale-[0.98] disabled:bg-gray-300 ${
+          added ? "bg-green-600" : "bg-primary"
+        }`}
+      >
+        {added ? <Check className="h-5 w-5" /> : <ShoppingBag className="h-5 w-5" />}
+        {added ? "Đã thêm vào giỏ" : "Thêm vào giỏ"}
+      </button>
+    </div>
+    </>
   );
 }

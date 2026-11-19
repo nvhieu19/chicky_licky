@@ -78,7 +78,7 @@ export default function CartPage() {
   if (items.length === 0) {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="max-w-md mx-auto text-center bg-white rounded-3xl p-10 border border-gray-100 shadow-sm">
+        <div className="liquid-glass mx-auto max-w-md rounded-3xl p-8 text-center sm:p-10">
           <div className="w-20 h-20 rounded-full bg-red-50 text-primary flex items-center justify-center mx-auto mb-5">
             <ShoppingBag className="w-10 h-10" />
           </div>
@@ -121,7 +121,7 @@ export default function CartPage() {
       </div>
 
       {/* Free shipping banner */}
-      <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+      <div className="liquid-glass-gold flex flex-col items-start justify-between gap-3 rounded-2xl p-4 sm:flex-row sm:items-center">
         <div className="flex items-center gap-2.5">
           <div className="w-8 h-8 rounded-full bg-secondary text-gray-900 flex items-center justify-center shrink-0">
             <Truck className="w-4 h-4" />
@@ -153,7 +153,7 @@ export default function CartPage() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Left: Items list */}
         <div className="lg:col-span-8 space-y-4">
-          <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden divide-y divide-gray-100">
+          <div className="liquid-glass overflow-hidden rounded-3xl divide-y divide-white/70">
             {items.map((item) => {
               const currentPrice = item.product.salePrice ?? item.product.price;
               const itemTotal = currentPrice * item.quantity;
@@ -189,10 +189,10 @@ export default function CartPage() {
                   {/* Quantity and Actions */}
                   <div className="flex items-center justify-between sm:justify-end gap-5 w-full sm:w-auto">
                     {/* Stepper */}
-                    <div className="flex items-center border border-gray-200 bg-gray-50 rounded-xl p-0.5">
+                    <div className="glass-stepper flex items-center rounded-xl p-0.5">
                       <button
                         onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
-                        className="w-8 h-8 rounded-lg flex items-center justify-center text-gray-600 hover:bg-white transition-colors cursor-pointer"
+                        className="flex h-10 w-10 items-center justify-center rounded-lg text-gray-600 transition-colors hover:bg-white cursor-pointer"
                         aria-label="Giảm"
                       >
                         <Minus className="w-3.5 h-3.5" />
@@ -202,7 +202,7 @@ export default function CartPage() {
                       </span>
                       <button
                         onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
-                        className="w-8 h-8 rounded-lg flex items-center justify-center text-gray-600 hover:bg-white transition-colors cursor-pointer"
+                        className="flex h-10 w-10 items-center justify-center rounded-lg text-gray-600 transition-colors hover:bg-white cursor-pointer"
                         aria-label="Tăng"
                       >
                         <Plus className="w-3.5 h-3.5" />
@@ -219,8 +219,9 @@ export default function CartPage() {
                     {/* Delete button */}
                     <button
                       onClick={() => removeFromCart(item.product.id)}
-                      className="p-2 text-gray-400 hover:text-red-500 rounded-lg hover:bg-red-50 transition-colors cursor-pointer"
+                      className="flex h-11 w-11 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-red-50 hover:text-red-500 cursor-pointer"
                       title="Xóa món"
+                      aria-label={`Xóa ${item.product.name} khỏi giỏ hàng`}
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -241,8 +242,8 @@ export default function CartPage() {
         </div>
 
         {/* Right: Order Summary */}
-        <div className="lg:col-span-4 space-y-4">
-          <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm space-y-5">
+        <div className="space-y-4 lg:col-span-4 lg:sticky lg:top-32 lg:self-start">
+          <div className="liquid-glass space-y-5 rounded-3xl p-5 sm:p-6">
             <h3 className="text-base font-black text-gray-900 border-b border-gray-100 pb-3">
               TÓM TẮT ĐƠN HÀNG
             </h3>
@@ -279,12 +280,12 @@ export default function CartPage() {
                       value={couponCodeInput}
                       onChange={(e) => setCouponCodeInput(e.target.value.toUpperCase())}
                       placeholder="Nhập mã (VD: CHICKY20)"
-                      className="flex-1 px-3.5 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs uppercase font-bold focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary"
+                      className="glass-input min-h-11 flex-1 rounded-xl px-3.5 py-2 text-xs font-bold uppercase focus:border-primary focus:ring-1 focus:ring-primary"
                     />
                     <button
                       type="submit"
                       disabled={couponLoading}
-                      className="px-4 py-2 bg-gray-900 hover:bg-black text-white text-xs font-bold rounded-xl transition-colors cursor-pointer disabled:opacity-60"
+                      className="min-h-11 rounded-xl bg-gray-900 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-black cursor-pointer disabled:opacity-60"
                     >
                       {couponLoading ? "..." : "Áp dụng"}
                     </button>
@@ -345,7 +346,7 @@ export default function CartPage() {
             {/* Checkout CTA */}
             <Link
               href="/checkout"
-              className="block w-full py-4 bg-primary hover:bg-primary-hover active:scale-[0.99] text-white text-center font-black text-sm rounded-2xl shadow-xl shadow-red-200 transition-all cursor-pointer"
+              className="block min-h-14 w-full rounded-2xl bg-primary py-4 text-center text-sm font-black text-white shadow-xl shadow-red-200 transition-all hover:bg-primary-hover active:scale-[0.99] cursor-pointer"
             >
               Tiến hành đặt hàng →
             </Link>

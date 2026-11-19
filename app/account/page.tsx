@@ -149,7 +149,7 @@ export default function AccountPage() {
         </div>
         <Link
           href="/orders"
-          className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl text-xs font-bold text-gray-700 hover:border-primary hover:text-primary transition-all shadow-sm"
+          className="liquid-glass inline-flex min-h-11 items-center gap-2 rounded-xl px-4 py-2 text-xs font-bold text-gray-700 transition-all hover:text-primary"
         >
           <ShoppingBag className="w-4 h-4 text-primary" />
           <span>Lịch sử đơn hàng ({orderCount})</span>
@@ -191,7 +191,7 @@ export default function AccountPage() {
           </div>
 
           {/* Navigation Menu */}
-          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-3 space-y-1">
+          <div className="liquid-glass space-y-1 rounded-2xl p-3">
             <button
               onClick={() => {
                 setActiveTab("profile");
@@ -244,7 +244,7 @@ export default function AccountPage() {
 
         {/* Right Column: Tab Panels */}
         <div className="lg:col-span-2">
-          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 sm:p-8">
+          <div className="liquid-glass rounded-2xl p-5 sm:p-8">
             {/* Alerts */}
             {successMsg && (
               <div className="mb-6 p-4 rounded-xl bg-green-50 border border-green-200 text-green-700 text-xs font-bold flex items-center gap-2">

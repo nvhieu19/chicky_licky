@@ -52,7 +52,7 @@ export default async function StoresPage() {
           {stores.map((store) => (
             <div
               key={store.id}
-              className="bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col sm:flex-row"
+              className="liquid-glass overflow-hidden rounded-3xl flex flex-col transition-shadow hover:shadow-xl sm:flex-row"
             >
               <div className="relative w-full sm:w-48 aspect-video sm:aspect-auto shrink-0 bg-gray-100">
                 {store.imageUrl ? (

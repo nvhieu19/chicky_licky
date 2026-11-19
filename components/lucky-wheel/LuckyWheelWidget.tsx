@@ -395,7 +395,7 @@ export default function LuckyWheelWidget() {
     <>
       <button
         type="button"
-        className="lucky-wheel-float"
+        className={`lucky-wheel-float ${pathname.startsWith("/menu") ? "lucky-wheel-float-menu" : ""}`}
         onClick={() => {
           setOpen(true);
           setError("");

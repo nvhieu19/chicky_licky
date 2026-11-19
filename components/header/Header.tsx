@@ -38,6 +38,22 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMobileMenuOpen(false);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [mobileMenuOpen]);
+
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
@@ -158,7 +174,7 @@ export default function Header() {
               ) : (
                 <button
                   onClick={() => openModal("login")}
-                  className="p-2 rounded-full hover:bg-gray-100 text-gray-700 transition-colors cursor-pointer"
+                  className="flex h-11 w-11 items-center justify-center rounded-full text-gray-700 transition-colors hover:bg-white/70 cursor-pointer"
                   title="Tài khoản"
                   aria-label="Tài khoản"
                 >
@@ -170,7 +186,7 @@ export default function Header() {
             {/* Notification Bell */}
             <button
               onClick={() => alert("Chưa có thông báo mới!")}
-              className="p-2 rounded-full hover:bg-gray-100 text-gray-700 transition-colors cursor-pointer relative"
+              className="relative flex h-11 w-11 items-center justify-center rounded-full text-gray-700 transition-colors hover:bg-white/70 cursor-pointer"
               title="Thông báo"
               aria-label="Thông báo"
             >
@@ -180,7 +196,7 @@ export default function Header() {
             {/* Cart Icon with Badge */}
             <Link
               href="/cart"
-              className="p-2 rounded-full hover:bg-gray-100 text-gray-700 transition-colors relative cursor-pointer"
+              className="relative flex h-11 w-11 items-center justify-center rounded-full text-gray-700 transition-colors hover:bg-white/70 cursor-pointer"
               title="Giỏ hàng"
               aria-label="Giỏ hàng"
             >
@@ -195,8 +211,10 @@ export default function Header() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 text-gray-700 hover:bg-gray-100 rounded-lg cursor-pointer"
+              className="md:hidden flex h-11 w-11 items-center justify-center rounded-xl text-gray-700 transition-colors hover:bg-white/70 cursor-pointer"
               aria-label="Menu"
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-navigation"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <MenuIcon className="w-6 h-6" />}
             </button>
@@ -204,21 +222,22 @@ export default function Header() {
         </div>
       </div>
 
-      {/* 2. Yellow Announcement & Search Bar (Screenshot 1) */}
-      <div className="liquid-glass-gold w-full py-2 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2.5">
+      {/* 2. Announcement & Search */}
+      <div className="liquid-glass-gold w-full px-4 py-1.5 sm:px-6 sm:py-2 lg:px-8">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-1.5 md:flex-row md:gap-2.5">
           {/* Left: Announcement text + Login/Register pill button */}
-          <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 text-xs text-gray-900 font-bold">
-            <span>Tích điểm cho mỗi đơn hàng và đổi nhiều quà hấp dẫn.</span>
+          <div className="flex flex-wrap items-center justify-center gap-2 text-[10px] font-bold text-gray-900 sm:text-xs md:justify-start">
+            <span className="hidden sm:inline">Tích điểm cho mỗi đơn hàng và đổi nhiều quà hấp dẫn.</span>
+            <span className="sm:hidden">Tích điểm • Ưu đãi thành viên</span>
             {!currentUser ? (
               <button
                 onClick={() => openModal("login")}
-                className="px-3.5 py-1 bg-white hover:bg-gray-50 text-gray-900 rounded-full text-xs font-extrabold shadow-sm hover:shadow transition-all cursor-pointer"
+                className="hidden rounded-full bg-white/80 px-3.5 py-1 text-xs font-extrabold text-gray-900 shadow-sm transition-all hover:bg-white hover:shadow sm:inline-flex"
               >
                 Đăng nhập / Đăng ký
               </button>
             ) : (
-              <span className="px-3 py-0.5 bg-white/70 rounded-full text-xs font-extrabold text-primary">
+              <span className="hidden rounded-full bg-white/70 px-3 py-0.5 text-xs font-extrabold text-primary sm:inline-flex">
                 Chào mừng {currentUser.name}!
               </span>
             )}
@@ -227,14 +246,14 @@ export default function Header() {
           {/* Right: Search box with magnifying glass */}
           <form
             onSubmit={handleSearchSubmit}
-            className="w-full md:w-80 relative flex items-center"
+            className="relative flex w-full items-center md:w-80"
           >
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Bạn tìm món gì?"
-              className="w-full pl-9 pr-4 py-1.5 bg-white rounded-full text-xs text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary shadow-sm"
+              className="glass-input min-h-10 w-full rounded-full py-2 pl-9 pr-4 text-xs text-gray-800 placeholder-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
             />
             <Search className="w-4 h-4 text-gray-400 absolute left-3 pointer-events-none" />
           </form>
@@ -243,7 +262,18 @@ export default function Header() {
 
       {/* 3. Mobile Navigation Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-white border-b border-gray-200 px-4 pt-3 pb-5 space-y-2 animate-in slide-in-from-top-4 duration-200">
+        <>
+        <button
+          type="button"
+          className="fixed inset-0 z-[59] bg-gray-950/25 backdrop-blur-sm md:hidden"
+          onClick={() => setMobileMenuOpen(false)}
+          aria-label="Đóng menu"
+        />
+        <nav
+          id="mobile-navigation"
+          aria-label="Điều hướng trên điện thoại"
+          className="liquid-glass fixed left-3 right-3 top-[7rem] z-[60] max-h-[calc(100dvh-8rem)] space-y-2 overflow-y-auto rounded-3xl p-4 shadow-2xl md:hidden"
+        >
           {navLinks.map((link) => {
             const isActive =
               pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href));
@@ -252,7 +282,7 @@ export default function Header() {
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`block px-4 py-2.5 rounded-xl text-sm font-bold ${
+                className={`flex min-h-12 items-center rounded-xl px-4 py-2.5 text-sm font-bold ${
                   isActive ? "bg-secondary text-gray-900" : "text-gray-700 hover:bg-gray-50"
                 }`}
               >
@@ -265,20 +295,20 @@ export default function Header() {
             <Link
               href="/admin"
               onClick={() => setMobileMenuOpen(false)}
-              className="block px-4 py-2.5 rounded-xl text-sm font-bold text-primary bg-red-50"
+              className="flex min-h-12 items-center rounded-xl bg-red-50 px-4 py-2.5 text-sm font-bold text-primary"
             >
               Trang Quản Trị Admin
             </Link>
           )}
 
-          <div className="pt-2 border-t border-gray-100 flex items-center justify-between">
+          <div className="flex items-center justify-between border-t border-white/70 pt-3">
             {currentUser ? (
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);
                   logout();
                 }}
-                className="w-full py-2.5 text-center text-sm font-bold text-red-600 bg-red-50 rounded-xl"
+                className="min-h-12 w-full rounded-xl bg-red-50 py-2.5 text-center text-sm font-bold text-red-600"
               >
                 Đăng xuất ({currentUser.name})
               </button>
@@ -288,13 +318,14 @@ export default function Header() {
                   setMobileMenuOpen(false);
                   openModal("login");
                 }}
-                className="w-full py-2.5 text-center text-sm font-bold text-white bg-primary rounded-xl shadow-md"
+                className="min-h-12 w-full rounded-xl bg-primary py-2.5 text-center text-sm font-bold text-white shadow-md"
               >
                 Đăng nhập / Đăng ký
               </button>
             )}
           </div>
-        </div>
+        </nav>
+        </>
       )}
     </header>
   );

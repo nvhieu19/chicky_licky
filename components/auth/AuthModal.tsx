@@ -210,7 +210,7 @@ export default function AuthModal() {
       <div className="absolute inset-0" onClick={closeModal} />
 
       {/* Modal Dialog Card */}
-      <div className="relative z-10 w-full max-w-[840px] bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row max-h-[92vh] border border-gray-100">
+      <div className="relative z-10 flex max-h-[92dvh] w-full max-w-[840px] flex-col overflow-hidden rounded-3xl border border-white/80 bg-white/90 shadow-2xl backdrop-blur-2xl md:flex-row">
         {/* Close Button */}
         <button
           onClick={closeModal}

@@ -169,21 +169,21 @@ export default function CheckoutPage() {
         </Link>
 
         {/* 3 Steps indicator */}
-        <div className="flex items-center gap-4 text-xs font-black">
+        <div className="flex items-center gap-2 text-[10px] font-black sm:gap-4 sm:text-xs">
           <div className="flex items-center gap-2 text-gray-400">
             <span className="w-6 h-6 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center text-[11px]">
               1
             </span>
             <span>Chọn món</span>
           </div>
-          <div className="w-10 h-0.5 bg-primary" />
+          <div className="h-0.5 w-4 bg-primary sm:w-10" />
           <div className="flex items-center gap-2 text-primary">
             <span className="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-[11px] shadow-sm">
               2
             </span>
             <span>Thanh toán</span>
           </div>
-          <div className="w-10 h-0.5 bg-gray-200" />
+          <div className="h-0.5 w-4 bg-gray-200 sm:w-10" />
           <div className="flex items-center gap-2 text-gray-400">
             <span className="w-6 h-6 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-[11px]">
               3
@@ -206,12 +206,12 @@ export default function CheckoutPage() {
           {/* Left Column: Delivery & Items */}
           <div className="lg:col-span-7 space-y-6">
             {/* Delivery Tabs (Screenshot 4) */}
-            <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm space-y-5">
+            <div className="liquid-glass space-y-5 rounded-3xl p-4 sm:p-6">
               <div className="flex bg-gray-100 p-1 rounded-2xl">
                 <button
                   type="button"
                   onClick={() => setDeliveryType("DELIVERY")}
-                  className={`flex-1 py-2.5 rounded-xl text-xs font-black flex items-center justify-center gap-2 transition-all cursor-pointer ${
+                  className={`flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl text-xs font-black transition-all cursor-pointer ${
                     deliveryType === "DELIVERY"
                       ? "bg-white text-gray-900 shadow-sm"
                       : "text-gray-500 hover:text-gray-800"
@@ -223,7 +223,7 @@ export default function CheckoutPage() {
                 <button
                   type="button"
                   onClick={() => setDeliveryType("PICKUP")}
-                  className={`flex-1 py-2.5 rounded-xl text-xs font-black flex items-center justify-center gap-2 transition-all cursor-pointer ${
+                  className={`flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl text-xs font-black transition-all cursor-pointer ${
                     deliveryType === "PICKUP"
                       ? "bg-white text-gray-900 shadow-sm"
                       : "text-gray-500 hover:text-gray-800"
@@ -247,7 +247,7 @@ export default function CheckoutPage() {
                       onChange={(e) => setRecipientName(e.target.value)}
                       placeholder="Nguyễn Văn A"
                       required
-                      className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs sm:text-sm focus:bg-white focus:border-primary"
+                      className="glass-input min-h-11 w-full rounded-xl px-4 py-2.5 text-xs sm:text-sm focus:border-primary"
                     />
                   </div>
                   <div>
@@ -260,7 +260,7 @@ export default function CheckoutPage() {
                       onChange={(e) => setPhone(e.target.value)}
                       placeholder="0901234567"
                       required
-                      className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs sm:text-sm focus:bg-white focus:border-primary"
+                      className="glass-input min-h-11 w-full rounded-xl px-4 py-2.5 text-xs sm:text-sm focus:border-primary"
                     />
                   </div>
                 </div>
@@ -274,7 +274,7 @@ export default function CheckoutPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="email@example.com"
-                    className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs sm:text-sm focus:bg-white focus:border-primary"
+                    className="glass-input min-h-11 w-full rounded-xl px-4 py-2.5 text-xs sm:text-sm focus:border-primary"
                   />
                 </div>
 
@@ -289,7 +289,7 @@ export default function CheckoutPage() {
                       onChange={(e) => setAddress(e.target.value)}
                       placeholder="Số nhà, tên đường, phường/xã, quận/huyện..."
                       required
-                      className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs sm:text-sm focus:bg-white focus:border-primary"
+                      className="glass-input min-h-11 w-full rounded-xl px-4 py-2.5 text-xs sm:text-sm focus:border-primary"
                     />
                   </div>
                 ) : (
@@ -300,7 +300,7 @@ export default function CheckoutPage() {
                     <select
                       value={storeId}
                       onChange={(e) => setStoreId(e.target.value)}
-                      className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs sm:text-sm focus:bg-white focus:border-primary font-bold"
+                      className="glass-input min-h-11 w-full rounded-xl px-4 py-2.5 text-xs font-bold sm:text-sm focus:border-primary"
                     >
                       {stores.map((s) => (
                         <option key={s.id} value={s.id}>
@@ -314,7 +314,7 @@ export default function CheckoutPage() {
             </div>
 
             {/* Order Items Info Card (Screenshot 4) */}
-            <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm space-y-4">
+            <div className="liquid-glass space-y-4 rounded-3xl p-4 sm:p-6">
               <div className="flex items-center justify-between border-b border-gray-100 pb-3">
                 <h3 className="text-sm font-black text-gray-900">Thông tin đơn hàng</h3>
                 <Link
@@ -365,7 +365,7 @@ export default function CheckoutPage() {
           {/* Right Column: Preferences, Payment & Summary */}
           <div className="lg:col-span-5 space-y-5">
             {/* Promotion card */}
-            <div className="bg-white rounded-3xl p-5 border border-gray-100 shadow-sm flex items-center justify-between">
+            <div className="liquid-glass flex items-center justify-between rounded-3xl p-5">
               <div className="flex items-center gap-2.5">
                 <Tag className="w-5 h-5 text-primary" />
                 <div>
@@ -381,14 +381,14 @@ export default function CheckoutPage() {
             </div>
 
             {/* Note & Plastic Cutlery Switch (Screenshot 4) */}
-            <div className="bg-white rounded-3xl p-5 border border-gray-100 shadow-sm space-y-4">
+            <div className="liquid-glass space-y-4 rounded-3xl p-5">
               <label className="block text-xs font-black text-gray-900">Ghi chú cho đơn hàng</label>
               <textarea
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
                 placeholder="Nhập nội dung (VD: Xin thêm tương ớt, ít đá...)"
                 rows={2}
-                className="w-full px-3.5 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs focus:bg-white focus:border-primary resize-none"
+                className="glass-input w-full rounded-xl px-3.5 py-2 text-xs focus:border-primary resize-none"
               />
 
               {/* Cutlery toggle */}
@@ -399,9 +399,11 @@ export default function CheckoutPage() {
                 <button
                   type="button"
                   onClick={() => setIncludeCutlery(!includeCutlery)}
-                  className={`w-11 h-6 rounded-full transition-colors relative cursor-pointer ${
+                  className={`relative h-7 w-12 rounded-full transition-colors cursor-pointer ${
                     includeCutlery ? "bg-secondary" : "bg-gray-200"
                   }`}
+                  aria-pressed={includeCutlery}
+                  aria-label="Lấy dụng cụ ăn uống"
                 >
                   <span
                     className={`block w-5 h-5 rounded-full bg-white shadow-sm transition-transform ${
@@ -413,11 +415,11 @@ export default function CheckoutPage() {
             </div>
 
             {/* Payment Method Card (Screenshot 4) */}
-            <div className="bg-white rounded-3xl p-5 border border-gray-100 shadow-sm space-y-3">
+            <div className="liquid-glass space-y-3 rounded-3xl p-5">
               <span className="block text-xs font-black text-gray-900">Phương thức thanh toán</span>
 
               {/* COD */}
-              <label className="flex items-center justify-between p-3.5 rounded-2xl border border-gray-200 hover:border-primary transition-colors cursor-pointer bg-gray-50/50">
+              <label className="flex min-h-14 items-center justify-between rounded-2xl border border-white/80 bg-white/45 p-3.5 transition-colors hover:border-primary cursor-pointer">
                 <div className="flex items-center gap-3">
                   <Banknote className="w-5 h-5 text-primary" />
                   <span className="text-xs font-extrabold text-gray-800">
@@ -434,7 +436,7 @@ export default function CheckoutPage() {
               </label>
 
               {/* Banking QR */}
-              <label className="flex items-center justify-between p-3.5 rounded-2xl border border-gray-200 hover:border-primary transition-colors cursor-pointer bg-gray-50/50">
+              <label className="flex min-h-14 items-center justify-between rounded-2xl border border-white/80 bg-white/45 p-3.5 transition-colors hover:border-primary cursor-pointer">
                 <div className="flex items-center gap-3">
                   <CreditCard className="w-5 h-5 text-secondary-hover" />
                   <span className="text-xs font-extrabold text-gray-800">
@@ -452,7 +454,7 @@ export default function CheckoutPage() {
             </div>
 
             {/* Payment Info Card (Screenshot 4) */}
-            <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm space-y-4">
+            <div className="liquid-glass space-y-4 rounded-3xl p-5 sm:p-6 lg:sticky lg:top-32 lg:self-start">
               <h3 className="text-sm font-black text-gray-900 border-b border-gray-100 pb-3">
                 Thông tin thanh toán
               </h3>
@@ -507,7 +509,7 @@ export default function CheckoutPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-4 bg-primary hover:bg-primary-hover active:scale-[0.99] text-white font-black text-sm rounded-2xl shadow-xl shadow-red-200 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70"
+                className="flex min-h-14 w-full items-center justify-center gap-2 rounded-2xl bg-primary py-4 text-sm font-black text-white shadow-xl shadow-red-200 transition-all hover:bg-primary-hover active:scale-[0.99] cursor-pointer disabled:opacity-70"
               >
                 {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Thanh toán ngay"}
               </button>

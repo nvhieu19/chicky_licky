@@ -12,7 +12,7 @@ export default function Footer() {
     return null;
   }
   return (
-    <footer className="w-full bg-white border-t border-gray-200 pt-12 pb-8 text-gray-700">
+    <footer className="w-full border-t border-white/80 bg-white/45 pt-10 pb-8 text-gray-700 shadow-[0_-8px_32px_rgba(54,34,40,0.04)] backdrop-blur-xl sm:pt-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-6 pb-10 border-b border-gray-100">
           {/* Column 1: Brand & Contact Info */}

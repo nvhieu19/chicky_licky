@@ -62,6 +62,7 @@ export default function MenuClient({
   const [quickViewProduct, setQuickViewProduct] = useState<ProductItem | null>(null);
   const [quickViewQuantity, setQuickViewQuantity] = useState(1);
   const [quickViewAdded, setQuickViewAdded] = useState(false);
+  const [cartToast, setCartToast] = useState("");
   const { addToCart, totalItems, subtotal } = useCart();
   const heroProduct = initialProducts.find((product) => product.isBestSeller) ?? initialProducts[0];
 
@@ -121,6 +122,12 @@ export default function MenuClient({
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [quickViewProduct]);
+
+  React.useEffect(() => {
+    if (!cartToast) return;
+    const timer = window.setTimeout(() => setCartToast(""), 2200);
+    return () => window.clearTimeout(timer);
+  }, [cartToast]);
 
   return (
     <>
@@ -351,6 +358,7 @@ export default function MenuClient({
                         setQuickViewAdded(false);
                         setQuickViewProduct(p);
                       }}
+                      onAdded={(name) => setCartToast(`Đã thêm ${name} vào giỏ hàng`)}
                     />
                   </div>
                 ))}
@@ -490,6 +498,13 @@ export default function MenuClient({
           Xem giỏ <ChevronDown className="h-4 w-4 -rotate-90" />
         </span>
       </Link>
+    )}
+    <div className="sr-only" aria-live="polite" aria-atomic="true">{cartToast}</div>
+    {cartToast && (
+      <div className="menu-cart-toast" role="status">
+        <Check className="h-4 w-4 shrink-0" />
+        <span>{cartToast}</span>
+      </div>
     )}
     </>
   );

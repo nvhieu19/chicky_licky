@@ -181,6 +181,47 @@ body {
   animation: lucky-wheel-float-in 260ms cubic-bezier(.2,.8,.2,1) both;
 }
 
+.menu-cart-toast {
+  position: fixed;
+  top: 8.5rem;
+  right: 16px;
+  z-index: 65;
+  display: flex;
+  max-width: min(420px, calc(100vw - 32px));
+  align-items: center;
+  gap: 9px;
+  padding: 12px 16px;
+  border: 1px solid rgb(255 255 255 / 90%);
+  border-radius: 16px;
+  background: rgb(255 255 255 / 88%);
+  box-shadow: 0 12px 32px rgb(34 21 24 / 14%), inset 0 1px 0 #fff;
+  color: #147344;
+  font-size: 13px;
+  font-weight: 800;
+  -webkit-backdrop-filter: blur(18px) saturate(170%);
+  backdrop-filter: blur(18px) saturate(170%);
+  animation: lucky-wheel-float-in 220ms cubic-bezier(.2,.8,.2,1) both;
+}
+
+.product-detail-mobile-cta {
+  position: fixed;
+  right: 12px;
+  bottom: max(10px, env(safe-area-inset-bottom));
+  left: 12px;
+  z-index: 42;
+  display: flex;
+  min-height: 68px;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 10px 8px 16px;
+  border: 1px solid rgb(255 255 255 / 84%);
+  border-radius: 22px;
+  background: rgb(255 255 255 / 88%);
+  box-shadow: 0 14px 40px rgb(38 25 29 / 18%), inset 0 1px 0 #fff;
+  -webkit-backdrop-filter: blur(22px) saturate(175%);
+  backdrop-filter: blur(22px) saturate(175%);
+}
+
 .hide-scrollbar {
   scrollbar-width: none;
 }
@@ -191,6 +232,19 @@ body {
 
 .lucky-wheel-float-menu {
   bottom: calc(92px + env(safe-area-inset-bottom));
+}
+
+.menu-cart-toast {
+  top: 8rem;
+  right: 12px;
+  left: 12px;
+  max-width: none;
+}
+
+.product-detail-mobile-cta {
+  right: 12px;
+  bottom: max(10px, env(safe-area-inset-bottom));
+  left: 12px;
 }
 
 @supports not ((backdrop-filter: blur(1px))) {

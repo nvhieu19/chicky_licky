@@ -20,6 +20,7 @@ export interface ProductCardProps {
   isAvailable?: boolean;
   categoryName?: string;
   onQuickView?: () => void;
+  onAdded?: (productName: string) => void;
 }
 
 export default function ProductCard({
@@ -35,6 +36,7 @@ export default function ProductCard({
   isAvailable = true,
   categoryName,
   onQuickView,
+  onAdded,
 }: ProductCardProps) {
   const { addToCart } = useCart();
   const [added, setAdded] = useState(false);
@@ -65,6 +67,7 @@ export default function ProductCard({
     );
 
     setAdded(true);
+    onAdded?.(name);
     setTimeout(() => setAdded(false), 1200);
   };
 

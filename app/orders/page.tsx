@@ -40,7 +40,7 @@ export default async function UserOrdersPage() {
       </div>
 
       {!session ? (
-        <div className="bg-white rounded-3xl p-10 text-center border border-gray-100 shadow-sm max-w-md mx-auto space-y-4">
+        <div className="liquid-glass mx-auto max-w-md space-y-4 rounded-3xl p-8 text-center sm:p-10">
           <div className="w-16 h-16 rounded-full bg-red-50 text-primary flex items-center justify-center mx-auto">
             <ShoppingBag className="w-8 h-8" />
           </div>
@@ -58,7 +58,7 @@ export default async function UserOrdersPage() {
           </div>
         </div>
       ) : orders.length === 0 ? (
-        <div className="bg-white rounded-3xl p-10 text-center border border-gray-100 shadow-sm max-w-md mx-auto space-y-4">
+        <div className="liquid-glass mx-auto max-w-md space-y-4 rounded-3xl p-8 text-center sm:p-10">
           <div className="w-16 h-16 rounded-full bg-gray-50 text-gray-400 flex items-center justify-center mx-auto">
             <Package className="w-8 h-8" />
           </div>
@@ -81,7 +81,7 @@ export default async function UserOrdersPage() {
           {orders.map((order) => (
             <div
               key={order.id}
-              className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-md transition-shadow flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+              className="liquid-glass liquid-glass-interactive flex flex-col items-start justify-between gap-4 rounded-2xl p-5 sm:flex-row sm:items-center"
             >
               <div className="space-y-1">
                 <div className="flex items-center gap-2.5">
