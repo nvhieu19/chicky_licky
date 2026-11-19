@@ -20,7 +20,7 @@ export default function BrandStoryPage() {
       </div>
 
       {/* Main Story Container */}
-      <div className="bg-white rounded-3xl p-6 sm:p-12 border border-gray-100 shadow-sm space-y-8">
+      <div className="liquid-glass space-y-8 rounded-3xl p-5 sm:p-12">
         {/* Title */}
         <div className="text-center space-y-2 border-b border-gray-100 pb-6">
           <span className="text-xs font-black text-secondary uppercase tracking-widest">

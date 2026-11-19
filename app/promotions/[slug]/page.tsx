@@ -100,7 +100,7 @@ export default async function PromotionDetailPage({ params }: Props) {
       </div>
 
       {/* Main card */}
-      <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
+      <div className="liquid-glass overflow-hidden rounded-3xl">
         {/* Banner image */}
         <div className="relative aspect-[21/9] sm:aspect-[2.4/1] w-full bg-gray-50">
           <Image
@@ -170,7 +170,7 @@ export default async function PromotionDetailPage({ params }: Props) {
                 {promo.comboItems.map((ci: any) => (
                   <div
                     key={ci.productId}
-                    className="flex items-center gap-3 bg-white rounded-xl px-4 py-3 border border-orange-100"
+                    className="flex items-center gap-3 rounded-xl border border-white/80 bg-white/70 px-4 py-3"
                   >
                     <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-gray-100 shrink-0">
                       <Image

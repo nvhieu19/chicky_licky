@@ -138,7 +138,7 @@ export default async function OrderDetailPage({ params, searchParams }: Props) {
       )}
 
       {/* Order Status & Progress Stepper */}
-      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-100 shadow-sm space-y-6">
+      <div className="liquid-glass space-y-6 rounded-3xl p-5 sm:p-8">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-gray-100 pb-4">
           <div>
             <span className="text-xs font-bold text-gray-400 uppercase tracking-wider block">
@@ -199,7 +199,7 @@ export default async function OrderDetailPage({ params, searchParams }: Props) {
       {/* Recipient & Order details */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Recipient Info */}
-        <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm space-y-3">
+        <div className="liquid-glass space-y-3 rounded-3xl p-5 sm:p-6">
           <h3 className="text-xs font-black uppercase tracking-wider text-gray-900 border-b border-gray-100 pb-2">
             Thông tin người nhận
           </h3>
@@ -228,7 +228,7 @@ export default async function OrderDetailPage({ params, searchParams }: Props) {
         </div>
 
         {/* Payment Summary */}
-        <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm space-y-3">
+        <div className="liquid-glass space-y-3 rounded-3xl p-5 sm:p-6">
           <h3 className="text-xs font-black uppercase tracking-wider text-gray-900 border-b border-gray-100 pb-2">
             Phương thức & Chi tiết thanh toán
           </h3>
@@ -264,7 +264,7 @@ export default async function OrderDetailPage({ params, searchParams }: Props) {
       </div>
 
       {/* Ordered Products Table */}
-      <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm space-y-4">
+      <div className="liquid-glass space-y-4 rounded-3xl p-5 sm:p-6">
         <h3 className="text-xs font-black uppercase tracking-wider text-gray-900 border-b border-gray-100 pb-2">
           Danh sách món đã đặt ({order.items.length} món)
         </h3>
