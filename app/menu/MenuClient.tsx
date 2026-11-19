@@ -353,6 +353,7 @@ export default function MenuClient({
                       isBestSeller={p.isBestSeller}
                       isNew={p.isNew}
                       isAvailable={p.isAvailable}
+                      imageAspect="square"
                       onQuickView={() => {
                         setQuickViewQuantity(1);
                         setQuickViewAdded(false);

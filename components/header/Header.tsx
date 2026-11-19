@@ -247,7 +247,7 @@ export default function Header() {
               ) : (
                 <button
                   onClick={() => openModal("login")}
-                  className="flex h-11 w-11 items-center justify-center rounded-full text-gray-700 transition-colors hover:bg-white/70 cursor-pointer"
+                  className="glass-icon-control flex h-11 w-11 items-center justify-center rounded-full text-gray-700 transition-colors hover:bg-white/70 cursor-pointer"
                   title="Tài khoản"
                   aria-label="Tài khoản"
                 >
@@ -269,7 +269,7 @@ export default function Header() {
             {/* Cart Icon with Badge */}
             <Link
               href="/cart"
-              className="relative flex h-11 w-11 items-center justify-center rounded-full text-gray-700 transition-colors hover:bg-white/70 cursor-pointer"
+              className="glass-icon-control relative flex h-11 w-11 items-center justify-center rounded-full text-gray-700 transition-colors hover:bg-white/70 cursor-pointer"
               title="Giỏ hàng"
               aria-label="Giỏ hàng"
             >
@@ -284,7 +284,7 @@ export default function Header() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden flex h-11 w-11 items-center justify-center rounded-xl text-gray-700 transition-colors hover:bg-white/70 cursor-pointer"
+              className="glass-icon-control md:hidden flex h-11 w-11 items-center justify-center rounded-xl text-gray-700 transition-colors hover:bg-white/70 cursor-pointer"
               aria-label="Menu"
               aria-expanded={mobileMenuOpen}
               aria-controls="mobile-navigation"

@@ -92,7 +92,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
           type="button"
           onClick={handleAddToCart}
           disabled={!product.isAvailable}
-          className={`flex-1 py-3.5 px-6 rounded-xl font-black text-sm flex items-center justify-center gap-2 transition-all cursor-pointer ${
+          className={`flex flex-1 items-center justify-center gap-2 rounded-xl px-6 py-3.5 text-sm font-black transition-all cursor-pointer ${
             added
               ? "bg-green-600 text-white"
               : product.isAvailable
@@ -115,23 +115,6 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
           )}
         </button>
       </div>
-    </div>
-    <div className="product-detail-mobile-cta sm:hidden">
-      <div className="min-w-0">
-        <span className="block text-[10px] font-bold uppercase tracking-wider text-gray-500">Tổng cộng</span>
-        <span className="block truncate text-base font-black text-primary">{formatPrice(totalPrice)}</span>
-      </div>
-      <button
-        type="button"
-        onClick={handleAddToCart}
-        disabled={!product.isAvailable}
-        className={`flex min-h-12 flex-1 items-center justify-center gap-2 rounded-xl px-4 text-xs font-black text-white shadow-lg shadow-red-200/50 transition-all active:scale-[0.98] disabled:bg-gray-300 ${
-          added ? "bg-green-600" : "bg-primary"
-        }`}
-      >
-        {added ? <Check className="h-5 w-5" /> : <ShoppingBag className="h-5 w-5" />}
-        {added ? "Đã thêm vào giỏ" : "Thêm vào giỏ"}
-      </button>
     </div>
     </>
   );

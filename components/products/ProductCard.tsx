@@ -19,6 +19,7 @@ export interface ProductCardProps {
   isNew?: boolean;
   isAvailable?: boolean;
   categoryName?: string;
+  imageAspect?: "square" | "landscape";
   onQuickView?: () => void;
   onAdded?: (productName: string) => void;
 }
@@ -35,6 +36,7 @@ export default function ProductCard({
   isNew,
   isAvailable = true,
   categoryName,
+  imageAspect = "landscape",
   onQuickView,
   onAdded,
 }: ProductCardProps) {
@@ -72,10 +74,10 @@ export default function ProductCard({
   };
 
   return (
-    <div className="liquid-glass liquid-glass-interactive group h-full rounded-2xl overflow-hidden flex flex-col justify-between">
+    <div className="liquid-glass liquid-glass-interactive menu-product-card group flex h-full flex-col justify-between overflow-hidden">
       {/* Clickable Image & Badges */}
-      <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-orange-50 via-amber-50 to-rose-50">
-        <Link href={`/menu/${slug}`} className="relative block h-full w-full">
+      <div className={`product-image-stage relative overflow-hidden bg-gradient-to-br from-orange-50 via-amber-50 to-rose-50 ${imageAspect === "square" ? "aspect-square sm:aspect-[4/3]" : "aspect-[4/3]"}`}>
+        <Link href={`/menu/${slug}`} className="relative z-[1] block h-full w-full">
           {imageError ? (
             <div className="flex h-full items-center justify-center text-primary/35">
               <UtensilsCrossed className="h-12 w-12" aria-hidden="true" />
@@ -89,42 +91,41 @@ export default function ProductCard({
               unoptimized={imageUrl?.startsWith("data:")}
               sizes="(max-width: 359px) 100vw, (max-width: 640px) 50vw, (max-width: 1024px) 50vw, 25vw"
               onError={() => setImageError(true)}
-              className="object-contain p-2.5 transition-transform duration-500 group-hover:scale-[1.04] sm:p-3"
+              className="object-contain p-1 transition-transform duration-500 group-hover:scale-[1.04] sm:p-2"
             />
           )}
 
-        {/* Badges container */}
-        <div className="absolute top-2.5 left-2.5 flex flex-col gap-1 z-10">
-          {isBestSeller && (
-            <span className="px-2.5 py-1 bg-primary text-white text-[10px] font-black uppercase rounded-lg shadow-md tracking-wider">
-              Best Seller
-            </span>
-          )}
-          {isNew && (
-            <span className="px-2.5 py-1 bg-secondary text-gray-900 text-[10px] font-black uppercase rounded-lg shadow-md tracking-wider">
-              Mới
-            </span>
-          )}
-          {hasDiscount && (
-            <span className="px-2 py-0.5 bg-red-600 text-white text-[10px] font-extrabold rounded-md shadow-sm">
-              -{discountPercent}%
-            </span>
-          )}
-        </div>
-
-        {!isAvailable && (
-          <div className="absolute inset-0 bg-black/50 backdrop-blur-[1px] flex items-center justify-center">
-            <span className="px-3 py-1 bg-gray-800 text-white text-xs font-bold rounded-full">
-              Hết hàng
-            </span>
+          <div className="absolute left-2.5 top-2.5 z-10 flex flex-wrap gap-1.5 sm:left-3 sm:top-3">
+            {isBestSeller && (
+              <span className="rounded-full border border-white/70 bg-primary/90 px-2.5 py-1 text-[9px] font-black uppercase tracking-wide text-white shadow-sm backdrop-blur-md sm:text-[10px]">
+                Bán chạy
+              </span>
+            )}
+            {isNew && (
+              <span className="rounded-full border border-white/80 bg-white/85 px-2.5 py-1 text-[9px] font-black uppercase tracking-wide text-gray-800 shadow-sm backdrop-blur-md sm:text-[10px]">
+                Món mới
+              </span>
+            )}
+            {hasDiscount && (
+              <span className="rounded-full border border-white/70 bg-secondary/95 px-2.5 py-1 text-[9px] font-black text-gray-900 shadow-sm backdrop-blur-md sm:text-[10px]">
+                -{discountPercent}%
+              </span>
+            )}
           </div>
-        )}
+
+          {!isAvailable && (
+            <div className="absolute inset-0 z-10 flex items-center justify-center bg-gray-950/25 backdrop-blur-[2px]">
+              <span className="rounded-full border border-white/70 bg-white/90 px-4 py-2 text-xs font-black text-gray-800 shadow-lg backdrop-blur-md">
+                Hết hàng
+              </span>
+            </div>
+          )}
         </Link>
         {onQuickView && (
           <button
             type="button"
             onClick={onQuickView}
-            className="absolute bottom-2.5 right-2.5 z-10 inline-flex min-h-11 items-center gap-1.5 rounded-full border border-white/80 bg-white/90 px-3 text-[11px] font-black text-gray-800 shadow-lg backdrop-blur-xl transition-colors hover:bg-white sm:opacity-0 sm:group-hover:opacity-100"
+            className="absolute bottom-2.5 right-2.5 z-10 inline-flex min-h-11 items-center gap-1.5 rounded-full border border-white/80 bg-white/90 px-3 text-[11px] font-black text-gray-800 shadow-lg backdrop-blur-xl transition-all hover:bg-white sm:translate-y-1 sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100"
             aria-label={`Xem nhanh ${name}`}
           >
             <Eye className="h-3.5 w-3.5 text-primary" />
@@ -134,24 +135,24 @@ export default function ProductCard({
       </div>
 
       {/* Product Content */}
-      <div className="flex flex-1 flex-col justify-between p-3 sm:p-4">
+      <div className="menu-product-card-content flex flex-1 flex-col justify-between p-3.5 sm:p-4">
         <div>
           <Link href={`/menu/${slug}`} className="block group-hover:text-primary transition-colors">
-            <h3 className="line-clamp-2 text-xs font-extrabold leading-snug text-gray-900 sm:text-sm">
+            <h3 className="line-clamp-2 text-[13px] font-extrabold leading-snug tracking-[-0.01em] text-gray-900 sm:text-sm">
               {name}
             </h3>
           </Link>
           {shortDescription && (
-            <p className="text-xs text-gray-500 mt-1 line-clamp-2 leading-relaxed">
+            <p className="mt-1.5 line-clamp-2 text-[11px] leading-relaxed text-gray-500 sm:text-xs">
               {shortDescription}
             </p>
           )}
         </div>
 
         {/* Price & CTA Button */}
-        <div className="mt-3 flex items-center justify-between gap-1.5 border-t border-white/70 pt-3 sm:mt-4 sm:gap-2">
+        <div className="mt-3 flex items-center justify-between gap-2 border-t border-gray-900/[0.045] pt-3.5 sm:mt-4 sm:pt-4">
           <div className="flex flex-col">
-            <span className="text-sm font-black text-primary sm:text-base">
+            <span className="text-[15px] font-black tracking-tight text-primary sm:text-base">
               {formatPrice(currentPrice)}
             </span>
             {hasDiscount && (
@@ -164,15 +165,15 @@ export default function ProductCard({
           <button
             onClick={handleAdd}
             disabled={!isAvailable}
-            className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl font-bold transition-all cursor-pointer ${
+            className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full font-bold transition-all duration-200 hover:scale-[1.04] active:scale-95 cursor-pointer ${
               added
-                ? "bg-green-600 text-white"
+                ? "bg-green-600 text-white shadow-md shadow-green-200/70"
                 : isAvailable
-                ? "bg-primary hover:bg-primary-hover active:scale-95 text-white shadow-md shadow-red-200"
-                : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                ? "bg-gradient-to-br from-[#f0193d] to-[#cf0028] text-white shadow-[0_6px_16px_rgba(230,0,40,0.22)] hover:shadow-[0_8px_20px_rgba(230,0,40,0.3)]"
+                : "bg-gray-200 text-gray-400 shadow-none cursor-not-allowed"
             }`}
             title="Thêm vào giỏ"
-            aria-label="Thêm vào giỏ"
+            aria-label={`Thêm ${name} vào giỏ hàng`}
           >
             {added ? <Check className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
           </button>
