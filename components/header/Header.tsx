@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -68,11 +69,83 @@ export default function Header() {
     { label: "VỀ CHÚNG TÔI", href: "/brand-story" },
   ];
 
+  const mobileNavigation =
+    mobileMenuOpen && typeof document !== "undefined"
+      ? createPortal(
+          <>
+            <button
+              type="button"
+              className="fixed inset-0 z-[59] bg-gray-950/25 backdrop-blur-sm md:hidden"
+              onClick={() => setMobileMenuOpen(false)}
+              aria-label="Đóng menu"
+            />
+            <nav
+              id="mobile-navigation"
+              aria-label="Điều hướng trên điện thoại"
+              className="mobile-navigation-panel fixed left-3 right-3 top-[9.5rem] z-[60] max-h-[calc(100dvh-10.5rem)] space-y-2 overflow-y-auto rounded-3xl p-4 shadow-2xl md:hidden"
+            >
+              {navLinks.map((link) => {
+                const isActive =
+                  pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href));
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`flex min-h-12 items-center rounded-xl px-4 py-2.5 text-sm font-bold ${
+                      isActive ? "bg-secondary text-gray-900" : "text-gray-700 hover:bg-gray-50"
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
+
+              {currentUser?.role === "ADMIN" && (
+                <Link
+                  href="/admin"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex min-h-12 items-center rounded-xl bg-red-50 px-4 py-2.5 text-sm font-bold text-primary"
+                >
+                  Trang Quản Trị Admin
+                </Link>
+              )}
+
+              <div className="flex items-center justify-between border-t border-white/70 pt-3">
+                {currentUser ? (
+                  <button
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      logout();
+                    }}
+                    className="min-h-12 w-full rounded-xl bg-red-50 py-2.5 text-center text-sm font-bold text-red-600"
+                  >
+                    Đăng xuất ({currentUser.name})
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      openModal("login");
+                    }}
+                    className="min-h-12 w-full rounded-xl bg-primary py-2.5 text-center text-sm font-bold text-white shadow-md"
+                  >
+                    Đăng nhập / Đăng ký
+                  </button>
+                )}
+              </div>
+            </nav>
+          </>,
+          document.body
+        )
+      : null;
+
   if (pathname.startsWith("/admin")) {
     return null;
   }
 
   return (
+    <>
     <header className="liquid-glass-header sticky top-0 z-40 w-full transition-shadow duration-200">
       {/* 1. Main Navigation Bar */}
       <div
@@ -260,73 +333,8 @@ export default function Header() {
         </div>
       </div>
 
-      {/* 3. Mobile Navigation Drawer */}
-      {mobileMenuOpen && (
-        <>
-        <button
-          type="button"
-          className="fixed inset-0 z-[59] bg-gray-950/25 backdrop-blur-sm md:hidden"
-          onClick={() => setMobileMenuOpen(false)}
-          aria-label="Đóng menu"
-        />
-        <nav
-          id="mobile-navigation"
-          aria-label="Điều hướng trên điện thoại"
-          className="liquid-glass mobile-navigation-panel fixed left-3 right-3 top-[7rem] z-[60] max-h-[calc(100dvh-8rem)] space-y-2 overflow-y-auto rounded-3xl p-4 shadow-2xl md:hidden"
-        >
-          {navLinks.map((link) => {
-            const isActive =
-              pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href));
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className={`flex min-h-12 items-center rounded-xl px-4 py-2.5 text-sm font-bold ${
-                  isActive ? "bg-secondary text-gray-900" : "text-gray-700 hover:bg-gray-50"
-                }`}
-              >
-                {link.label}
-              </Link>
-            );
-          })}
-
-          {currentUser?.role === "ADMIN" && (
-            <Link
-              href="/admin"
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex min-h-12 items-center rounded-xl bg-red-50 px-4 py-2.5 text-sm font-bold text-primary"
-            >
-              Trang Quản Trị Admin
-            </Link>
-          )}
-
-          <div className="flex items-center justify-between border-t border-white/70 pt-3">
-            {currentUser ? (
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  logout();
-                }}
-                className="min-h-12 w-full rounded-xl bg-red-50 py-2.5 text-center text-sm font-bold text-red-600"
-              >
-                Đăng xuất ({currentUser.name})
-              </button>
-            ) : (
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  openModal("login");
-                }}
-                className="min-h-12 w-full rounded-xl bg-primary py-2.5 text-center text-sm font-bold text-white shadow-md"
-              >
-                Đăng nhập / Đăng ký
-              </button>
-            )}
-          </div>
-        </nav>
-        </>
-      )}
     </header>
+    {mobileNavigation}
+    </>
   );
 }
