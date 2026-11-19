@@ -197,7 +197,7 @@ export default function MenuClient({
 
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-[205px_minmax(0,1fr)] lg:gap-7">
         {/* 2. Category navigation */}
-        <aside className="sticky top-[7.25rem] z-30 -mx-4 min-w-0 px-4 lg:top-32 lg:mx-0 lg:self-start lg:px-0">
+        <aside className="sticky top-[9rem] z-30 -mx-4 min-w-0 px-4 lg:top-32 lg:mx-0 lg:self-start lg:px-0">
           <div className="liquid-glass rounded-2xl p-2.5 sm:p-3 lg:p-4">
             <h2 className="mb-3 hidden px-2 text-[11px] font-black uppercase tracking-[0.16em] text-gray-400 lg:block">
               Danh mục món
@@ -243,7 +243,7 @@ export default function MenuClient({
                   <button
                     type="button"
                     onClick={() => setSearchQuery("")}
-                    className="absolute right-2 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full text-gray-500 hover:bg-gray-100"
+                    className="absolute right-1 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full text-gray-500 hover:bg-gray-100"
                     aria-label="Xóa nội dung tìm kiếm"
                   >
                     <X className="h-4 w-4" />
@@ -425,7 +425,7 @@ export default function MenuClient({
                   <button
                     type="button"
                     onClick={() => setQuickViewQuantity((quantity) => Math.max(1, quantity - 1))}
-                    className="flex h-10 w-10 items-center justify-center rounded-lg hover:bg-white/80"
+                    className="flex h-11 w-11 items-center justify-center rounded-lg hover:bg-white/80"
                     aria-label="Giảm số lượng"
                   >
                     <Minus className="h-4 w-4" />
@@ -434,7 +434,7 @@ export default function MenuClient({
                   <button
                     type="button"
                     onClick={() => setQuickViewQuantity((quantity) => quantity + 1)}
-                    className="flex h-10 w-10 items-center justify-center rounded-lg hover:bg-white/80"
+                    className="flex h-11 w-11 items-center justify-center rounded-lg hover:bg-white/80"
                     aria-label="Tăng số lượng"
                   >
                     <Plus className="h-4 w-4" />

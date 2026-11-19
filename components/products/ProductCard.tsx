@@ -126,7 +126,7 @@ export default function ProductCard({
               event.stopPropagation();
               onQuickView();
             }}
-            className="absolute bottom-2.5 right-2.5 z-10 inline-flex min-h-10 items-center gap-1.5 rounded-full border border-white/80 bg-white/90 px-3 text-[11px] font-black text-gray-800 shadow-lg backdrop-blur-xl transition-colors hover:bg-white sm:opacity-0 sm:group-hover:opacity-100"
+            className="absolute bottom-2.5 right-2.5 z-10 inline-flex min-h-11 items-center gap-1.5 rounded-full border border-white/80 bg-white/90 px-3 text-[11px] font-black text-gray-800 shadow-lg backdrop-blur-xl transition-colors hover:bg-white sm:opacity-0 sm:group-hover:opacity-100"
             aria-label={`Xem nhanh ${name}`}
           >
             <Eye className="h-3.5 w-3.5 text-primary" />
@@ -166,7 +166,7 @@ export default function ProductCard({
           <button
             onClick={handleAdd}
             disabled={!isAvailable}
-            className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl font-bold transition-all cursor-pointer sm:h-11 sm:w-11 ${
+            className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl font-bold transition-all cursor-pointer ${
               added
                 ? "bg-green-600 text-white"
                 : isAvailable

@@ -192,7 +192,7 @@ export default function CartPage() {
                     <div className="glass-stepper flex items-center rounded-xl p-0.5">
                       <button
                         onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
-                        className="flex h-10 w-10 items-center justify-center rounded-lg text-gray-600 transition-colors hover:bg-white cursor-pointer"
+                        className="flex h-11 w-11 items-center justify-center rounded-lg text-gray-600 transition-colors hover:bg-white cursor-pointer"
                         aria-label="Giảm"
                       >
                         <Minus className="w-3.5 h-3.5" />
@@ -202,7 +202,7 @@ export default function CartPage() {
                       </span>
                       <button
                         onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
-                        className="flex h-10 w-10 items-center justify-center rounded-lg text-gray-600 transition-colors hover:bg-white cursor-pointer"
+                        className="flex h-11 w-11 items-center justify-center rounded-lg text-gray-600 transition-colors hover:bg-white cursor-pointer"
                         aria-label="Tăng"
                       >
                         <Plus className="w-3.5 h-3.5" />
