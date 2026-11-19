@@ -205,17 +205,22 @@ export default function AuthModal() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-2 backdrop-blur-md animate-in fade-in duration-200 sm:p-4">
       {/* Backdrop click area */}
       <div className="absolute inset-0" onClick={closeModal} />
 
       {/* Modal Dialog Card */}
-      <div className="relative z-10 flex max-h-[92dvh] w-full max-w-[840px] flex-col overflow-hidden rounded-3xl border border-white/80 bg-white/90 shadow-2xl backdrop-blur-2xl md:flex-row">
+      <div
+        className="relative z-10 flex max-h-[92dvh] w-full max-w-[840px] flex-col overflow-hidden rounded-3xl border border-white/80 bg-white/90 shadow-2xl backdrop-blur-2xl md:flex-row"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="auth-modal-title"
+      >
         {/* Close Button */}
         <button
           onClick={closeModal}
           aria-label="Đóng"
-          className="absolute top-4 right-4 z-20 w-8 h-8 rounded-full bg-white/90 md:bg-white text-gray-700 hover:text-black hover:bg-gray-100 flex items-center justify-center shadow-md transition-all cursor-pointer"
+          className="absolute right-3 top-3 z-20 flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-gray-700 shadow-md transition-all hover:bg-gray-100 hover:text-black cursor-pointer sm:right-4 sm:top-4"
         >
           <X className="w-5 h-5" />
         </button>
@@ -233,7 +238,7 @@ export default function AuthModal() {
             </div>
           </div>
 
-          <h2 className="text-2xl font-black text-gray-900 tracking-tight">
+          <h2 id="auth-modal-title" className="text-2xl font-black text-gray-900 tracking-tight">
             {mode === "login" ? "Đăng nhập tài khoản" : "Tạo tài khoản mới"}
           </h2>
           <p className="text-xs text-gray-500 mt-1 mb-5">
@@ -301,7 +306,7 @@ export default function AuthModal() {
                   onChange={(e) => setLoginEmailOrPhone(e.target.value)}
                   placeholder="Vui lòng nhập..."
                   required
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                  className="glass-input min-h-11 w-full rounded-xl px-4 py-3 text-sm transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
@@ -325,7 +330,7 @@ export default function AuthModal() {
                     onChange={(e) => setLoginPassword(e.target.value)}
                     placeholder="Nhập mật khẩu..."
                     required
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all pr-10"
+                    className="glass-input min-h-11 w-full rounded-xl px-4 py-3 pr-10 text-sm transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
                   />
                   <button
                     type="button"
@@ -365,7 +370,7 @@ export default function AuthModal() {
                   onChange={(e) => setRegName(e.target.value)}
                   placeholder="Nguyễn Văn A"
                   required
-                  className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                  className="glass-input min-h-11 w-full rounded-xl px-3.5 py-2.5 text-sm transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
@@ -380,7 +385,7 @@ export default function AuthModal() {
                     onChange={(e) => setRegEmail(e.target.value)}
                     placeholder="email@vidu.com"
                     required
-                    className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                    className="glass-input min-h-11 w-full rounded-xl px-3.5 py-2.5 text-sm transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
                   />
                 </div>
                 <div>
@@ -393,7 +398,7 @@ export default function AuthModal() {
                     onChange={(e) => setRegPhone(e.target.value)}
                     placeholder="0901234567"
                     required
-                    className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                    className="glass-input min-h-11 w-full rounded-xl px-3.5 py-2.5 text-sm transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
                   />
                 </div>
               </div>
@@ -410,7 +415,7 @@ export default function AuthModal() {
                       onChange={(e) => setRegPassword(e.target.value)}
                       placeholder="Ít nhất 6 ký tự"
                       required
-                      className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all pr-8"
+                      className="glass-input min-h-11 w-full rounded-xl px-3.5 py-2.5 pr-8 text-sm transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
                     />
                     <button
                       type="button"
@@ -432,7 +437,7 @@ export default function AuthModal() {
                     onChange={(e) => setRegConfirmPassword(e.target.value)}
                     placeholder="Xác nhận"
                     required
-                    className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                    className="glass-input min-h-11 w-full rounded-xl px-3.5 py-2.5 text-sm transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
                   />
                 </div>
               </div>
