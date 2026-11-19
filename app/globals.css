@@ -48,13 +48,27 @@ body {
 }
 
 .liquid-glass {
+  position: relative;
   border: 1px solid rgb(255 255 255 / 78%);
   background: linear-gradient(135deg, rgb(255 255 255 / 82%), rgb(255 255 255 / 56%));
   -webkit-backdrop-filter: blur(24px) saturate(175%);
   backdrop-filter: blur(24px) saturate(175%);
+  isolation: isolate;
   box-shadow:
     0 16px 42px rgb(61 34 39 / 8%),
     inset 0 1px 0 rgb(255 255 255 / 92%);
+}
+
+.liquid-glass::before {
+  position: absolute;
+  top: 0;
+  right: 12%;
+  left: 12%;
+  height: 1px;
+  border-radius: inherit;
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 96%), transparent);
+  content: "";
+  pointer-events: none;
 }
 
 .liquid-glass-interactive {
@@ -97,9 +111,93 @@ body {
   box-shadow: 0 8px 28px rgb(42 26 31 / 6%);
 }
 
+.glass-input,
+.glass-stepper {
+  border: 1px solid rgb(255 255 255 / 90%);
+  background: rgb(255 255 255 / 68%);
+  box-shadow: inset 0 1px 2px rgb(65 45 45 / 5%), 0 3px 12px rgb(65 45 45 / 4%);
+  color: #201b1b;
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+  backdrop-filter: blur(14px) saturate(150%);
+}
+
+.glass-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: grid;
+  overflow-y: auto;
+  place-items: center;
+  padding: 16px;
+  background: rgb(30 20 22 / 48%);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  animation: lucky-wheel-fade-in 180ms ease-out both;
+}
+
+.glass-quick-view {
+  position: relative;
+  width: min(100%, 840px);
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 82%);
+  border-radius: 28px;
+  background: linear-gradient(145deg, rgb(255 255 255 / 96%), rgb(250 247 246 / 90%));
+  box-shadow: 0 32px 100px rgb(28 17 20 / 30%), inset 0 1px 0 #fff;
+  animation: lucky-wheel-modal-in 240ms cubic-bezier(.2,.8,.2,1) both;
+}
+
+.glass-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border: 1px solid rgb(255 255 255 / 90%);
+  border-radius: 50%;
+  background: rgb(255 255 255 / 82%);
+  box-shadow: 0 4px 14px rgb(28 17 20 / 10%);
+  color: #201b1b;
+  cursor: pointer;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+.menu-cart-summary {
+  position: fixed;
+  right: 12px;
+  bottom: max(12px, env(safe-area-inset-bottom));
+  left: 12px;
+  z-index: 42;
+  display: flex;
+  min-height: 68px;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 10px;
+  border-radius: 22px;
+  box-shadow: 0 14px 40px rgb(38 25 29 / 18%), inset 0 1px 0 rgb(255 255 255 / 96%);
+  animation: lucky-wheel-float-in 260ms cubic-bezier(.2,.8,.2,1) both;
+}
+
+.hide-scrollbar {
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.lucky-wheel-float-menu {
+  bottom: calc(92px + env(safe-area-inset-bottom));
+}
+
 @supports not ((backdrop-filter: blur(1px))) {
   .liquid-glass,
-  .liquid-glass-header {
+  .liquid-glass-header,
+  .glass-input,
+  .glass-stepper {
     background-color: rgb(255 255 255 / 94%);
   }
 }
@@ -599,6 +697,11 @@ textarea {
     padding: 6px 10px 6px 6px;
   }
 
+  .lucky-wheel-float-menu {
+    right: 12px;
+    bottom: calc(94px + env(safe-area-inset-bottom));
+  }
+
   .lucky-wheel-float-icon {
     width: 42px;
     height: 42px;
@@ -631,6 +734,18 @@ textarea {
 
   .lucky-wheel-heading {
     padding: 0 22px;
+  }
+
+  .glass-modal-backdrop {
+    align-items: end;
+    padding: 0;
+  }
+
+  .glass-quick-view {
+    max-height: min(92dvh, 760px);
+    overflow-y: auto;
+    border-radius: 26px 26px 0 0;
+    padding-bottom: env(safe-area-inset-bottom);
   }
 
   .lucky-wheel-heading p {

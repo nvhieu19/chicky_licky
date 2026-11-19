@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Plus, Check } from "lucide-react";
+import { Eye, Plus, Check, UtensilsCrossed } from "lucide-react";
 import { formatPrice } from "@/lib/utils";
 import { useCart } from "@/components/providers/CartContext";
 
@@ -19,6 +19,7 @@ export interface ProductCardProps {
   isNew?: boolean;
   isAvailable?: boolean;
   categoryName?: string;
+  onQuickView?: () => void;
 }
 
 export default function ProductCard({
@@ -33,9 +34,11 @@ export default function ProductCard({
   isNew,
   isAvailable = true,
   categoryName,
+  onQuickView,
 }: ProductCardProps) {
   const { addToCart } = useCart();
   const [added, setAdded] = useState(false);
+  const [imageError, setImageError] = useState(false);
 
   const hasDiscount = salePrice && salePrice < price;
   const currentPrice = salePrice ?? price;
@@ -69,14 +72,22 @@ export default function ProductCard({
     <div className="liquid-glass liquid-glass-interactive group h-full rounded-2xl overflow-hidden flex flex-col justify-between">
       {/* Clickable Image & Badges */}
       <Link href={`/menu/${slug}`} className="block relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-orange-50 via-amber-50 to-rose-50">
-        <Image
-          src={imageUrl}
-          alt={name}
-          fill
-          unoptimized={imageUrl?.startsWith("data:")}
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-          className="object-contain p-3 group-hover:scale-[1.04] transition-transform duration-500"
-        />
+        {imageError ? (
+          <div className="flex h-full items-center justify-center text-primary/35">
+            <UtensilsCrossed className="h-12 w-12" aria-hidden="true" />
+            <span className="sr-only">Không thể tải ảnh {name}</span>
+          </div>
+        ) : (
+          <Image
+            src={imageUrl}
+            alt={name}
+            fill
+            unoptimized={imageUrl?.startsWith("data:")}
+            sizes="(max-width: 359px) 100vw, (max-width: 640px) 50vw, (max-width: 1024px) 50vw, 25vw"
+            onError={() => setImageError(true)}
+            className="object-contain p-2.5 transition-transform duration-500 group-hover:scale-[1.04] sm:p-3"
+          />
+        )}
 
         {/* Badges container */}
         <div className="absolute top-2.5 left-2.5 flex flex-col gap-1 z-10">
@@ -104,13 +115,28 @@ export default function ProductCard({
             </span>
           </div>
         )}
+        {onQuickView && (
+          <button
+            type="button"
+            onClick={(event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              onQuickView();
+            }}
+            className="absolute bottom-2.5 right-2.5 z-10 inline-flex min-h-10 items-center gap-1.5 rounded-full border border-white/80 bg-white/90 px-3 text-[11px] font-black text-gray-800 shadow-lg backdrop-blur-xl transition-colors hover:bg-white sm:opacity-0 sm:group-hover:opacity-100"
+            aria-label={`Xem nhanh ${name}`}
+          >
+            <Eye className="h-3.5 w-3.5 text-primary" />
+            <span>Xem nhanh</span>
+          </button>
+        )}
       </Link>
 
       {/* Product Content */}
-      <div className="p-4 flex-1 flex flex-col justify-between">
+      <div className="flex flex-1 flex-col justify-between p-3 sm:p-4">
         <div>
           <Link href={`/menu/${slug}`} className="block group-hover:text-primary transition-colors">
-            <h3 className="font-extrabold text-gray-900 text-sm leading-snug line-clamp-2">
+            <h3 className="line-clamp-2 text-xs font-extrabold leading-snug text-gray-900 sm:text-sm">
               {name}
             </h3>
           </Link>
@@ -122,9 +148,9 @@ export default function ProductCard({
         </div>
 
         {/* Price & CTA Button */}
-        <div className="mt-4 pt-3 border-t border-gray-50 flex items-center justify-between">
+        <div className="mt-3 flex items-center justify-between gap-1.5 border-t border-white/70 pt-3 sm:mt-4 sm:gap-2">
           <div className="flex flex-col">
-            <span className="text-base font-black text-primary">
+            <span className="text-sm font-black text-primary sm:text-base">
               {formatPrice(currentPrice)}
             </span>
             {hasDiscount && (
@@ -137,7 +163,7 @@ export default function ProductCard({
           <button
             onClick={handleAdd}
             disabled={!isAvailable}
-            className={`p-2.5 rounded-xl font-bold transition-all flex items-center justify-center cursor-pointer ${
+            className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl font-bold transition-all cursor-pointer sm:h-11 sm:w-11 ${
               added
                 ? "bg-green-600 text-white"
                 : isAvailable
