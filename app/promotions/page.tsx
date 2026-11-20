@@ -5,6 +5,7 @@ import { Clock, ArrowRight, Gift, Layers, Tag } from "lucide-react";
 import prisma from "@/lib/prisma";
 import { formatPrice } from "@/lib/utils";
 import ComboOrderButton from "@/components/promotions/ComboOrderButton";
+import AnimatedBannerText from "@/components/common/AnimatedBannerText";
 
 export const dynamic = "force-dynamic";
 
@@ -58,8 +59,12 @@ export default async function PromotionsPage() {
             <span>Chương trình khuyến mãi</span>
           </div>
           <h1 className="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
-            ƯU ĐÃI ĐẶC BIỆT <br />
-            <span className="text-secondary">TIỆC VUI HẾT CỠ</span>
+            <AnimatedBannerText className="block">
+              ƯU ĐÃI ĐẶC BIỆT
+            </AnimatedBannerText>
+            <AnimatedBannerText className="block text-secondary" delay={250}>
+              TIỆC VUI HẾT CỠ
+            </AnimatedBannerText>
           </h1>
           <p className="text-xs sm:text-sm text-white/90 mt-2 font-medium">
             Cập nhật liên tục các deal hot, combo giảm giá và quà tặng bất ngờ từ Chicky Licky.

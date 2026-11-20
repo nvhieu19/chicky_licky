@@ -111,6 +111,70 @@ body {
     inset 0 1px 0 rgb(255 255 255 / 48%);
 }
 
+.banner-typewriter {
+  display: inline-block;
+  clip-path: inset(0 100% 0 0);
+  animation: banner-typewriter 1.6s steps(var(--banner-type-steps), end) var(--banner-type-delay) both;
+}
+
+.banner-typewriter.block {
+  display: block;
+}
+
+.banner-marquee-track {
+  animation: banner-marquee 20s linear infinite;
+}
+
+.banner-image-shine::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 35%, rgb(255 255 255 / 22%) 50%, transparent 65%);
+  content: "";
+  pointer-events: none;
+  transform: translateX(-120%);
+  animation: banner-image-shine 5s ease-in-out 1s infinite;
+}
+
+@keyframes banner-typewriter {
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes banner-image-shine {
+  55%,
+  100% {
+    transform: translateX(120%);
+  }
+}
+
+@keyframes banner-marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .banner-typewriter {
+    clip-path: none;
+    animation: none;
+  }
+
+  .banner-image-shine::after {
+    animation: none;
+  }
+
+  .banner-marquee-track {
+    width: 100%;
+    justify-content: center;
+    animation: none;
+  }
+
+  .banner-marquee-track > span[aria-hidden="true"] {
+    display: none;
+  }
+}
+
 .liquid-glass-gold {
   border: 1px solid rgb(255 255 255 / 78%);
   background: linear-gradient(135deg, rgb(255 250 231 / 82%), rgb(255 224 151 / 62%));

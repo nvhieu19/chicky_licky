@@ -20,6 +20,7 @@ import {
 import ProductCard from "@/components/products/ProductCard";
 import { formatPrice } from "@/lib/utils";
 import { useCart } from "@/components/providers/CartContext";
+import AnimatedBannerText from "@/components/common/AnimatedBannerText";
 
 interface CategoryItem {
   id: string;
@@ -141,8 +142,12 @@ export default function MenuClient({
               Thực đơn Chicky Licky
             </span>
             <h1 className="text-[clamp(1.8rem,6vw,3.25rem)] font-black leading-[1.08] tracking-tight">
-              MÓN NGON MỖI NGÀY
-              <span className="block text-secondary">ĂN LÀ MÊ NGAY</span>
+              <AnimatedBannerText className="block">
+                MÓN NGON MỖI NGÀY
+              </AnimatedBannerText>
+              <AnimatedBannerText className="block text-secondary" delay={250}>
+                ĂN LÀ MÊ NGAY
+              </AnimatedBannerText>
             </h1>
             <p className="mt-3 text-sm font-medium text-white/85 sm:text-base">
               Chọn món bạn yêu thích, giao nóng hổi đến tận nơi.
@@ -187,6 +192,25 @@ export default function MenuClient({
               </span>
             </Link>
           )}
+        </div>
+        <div className="relative z-10 mt-6 overflow-hidden border-y border-white/20 py-2.5">
+          <div className="banner-marquee-track flex w-max whitespace-nowrap">
+            <span className="px-5 text-[10px] font-black uppercase tracking-[0.2em] text-amber-200 sm:text-xs">
+              GÀ RÁN GIÒN RỤM <span className="px-3 text-white/60">✦</span>
+              COMBO SIÊU HỜI <span className="px-3 text-white/60">✦</span>
+              MÓN NGON MỖI NGÀY <span className="px-3 text-white/60">✦</span>
+              CHICKY LICKY
+            </span>
+            <span
+              aria-hidden="true"
+              className="px-5 text-[10px] font-black uppercase tracking-[0.2em] text-amber-200 sm:text-xs"
+            >
+              GÀ RÁN GIÒN RỤM <span className="px-3 text-white/60">✦</span>
+              COMBO SIÊU HỜI <span className="px-3 text-white/60">✦</span>
+              MÓN NGON MỖI NGÀY <span className="px-3 text-white/60">✦</span>
+              CHICKY LICKY
+            </span>
+          </div>
         </div>
         <div className="pointer-events-none absolute -bottom-24 -right-12 h-72 w-72 rounded-full bg-secondary/25 blur-3xl" />
         <div className="pointer-events-none absolute -top-20 right-[18%] h-48 w-48 rounded-full bg-white/10 blur-3xl" />

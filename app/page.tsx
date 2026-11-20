@@ -4,6 +4,7 @@ import Image from "next/image";
 import { ArrowRight, Flame, Sparkles, Clock, Award, ShieldCheck, Gift } from "lucide-react";
 import prisma from "@/lib/prisma";
 import ProductCard from "@/components/products/ProductCard";
+import AnimatedBannerText from "@/components/common/AnimatedBannerText";
 
 export const dynamic = "force-dynamic";
 
@@ -108,7 +109,7 @@ export default async function HomePage() {
           {/* Right Hero Banner: Custom Banner from Admin or Welcome Card */}
           {banners && banners.length > 0 ? (
             <div className="liquid-glass lg:col-span-8 relative rounded-3xl overflow-hidden min-h-[360px] flex items-center justify-center">
-              <Link href={banners[0].link || "/menu"} className="block w-full h-full relative aspect-[16/8] sm:aspect-[2/1]">
+              <Link href={banners[0].link || "/menu"} className="banner-image-shine block w-full h-full relative aspect-[16/8] sm:aspect-[2/1]">
                 <Image
                   src={banners[0].imageUrl}
                   alt={banners[0].title}
@@ -117,6 +118,11 @@ export default async function HomePage() {
                   unoptimized={banners[0].imageUrl?.startsWith("data:")}
                   className="object-cover"
                 />
+                <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 via-black/40 to-transparent px-5 pb-5 pt-14 text-white sm:px-7 sm:pb-7">
+                  <AnimatedBannerText className="block max-w-[90%] text-lg font-black leading-tight drop-shadow sm:text-2xl">
+                    {banners[0].title}
+                  </AnimatedBannerText>
+                </span>
               </Link>
             </div>
           ) : (
@@ -141,7 +147,9 @@ export default async function HomePage() {
               {/* Middle showcase */}
               <div className="my-8 relative z-10 space-y-2">
                 <h3 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">
-                  Khám phá thực đơn đồ ăn nhanh phong phú
+                  <AnimatedBannerText>
+                    Khám phá thực đơn đồ ăn nhanh phong phú
+                  </AnimatedBannerText>
                 </h3>
                 <p className="text-xs sm:text-sm text-gray-600 max-w-lg leading-relaxed">
                   Gà rán giòn rụm đậm vị sốt Hàn Quốc và các combo siêu tiết kiệm chỉ từ 42K đang chờ đón bạn!
