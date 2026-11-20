@@ -150,7 +150,7 @@ export default function Header() {
       {/* 1. Main Navigation Bar */}
       <div
         className={`w-full border-b border-gray-100 ${
-          isScrolled ? "bg-white/70 backdrop-blur-xl" : "bg-white/45 backdrop-blur-xl"
+          isScrolled ? "bg-white/48 backdrop-blur-xl" : "bg-white/28 backdrop-blur-xl"
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
@@ -284,12 +284,12 @@ export default function Header() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="glass-icon-control md:hidden flex h-11 w-11 items-center justify-center rounded-xl text-gray-700 transition-colors hover:bg-white/70 cursor-pointer"
+              className="glass-icon-control md:hidden flex h-11 w-11 items-center justify-center rounded-full text-gray-700 transition-colors hover:bg-white/70 cursor-pointer"
               aria-label="Menu"
               aria-expanded={mobileMenuOpen}
               aria-controls="mobile-navigation"
             >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <MenuIcon className="w-6 h-6" />}
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <MenuIcon className="w-5 h-5" />}
             </button>
           </div>
         </div>
