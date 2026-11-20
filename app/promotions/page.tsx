@@ -52,7 +52,7 @@ export default async function PromotionsPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
       {/* Banner hero */}
-      <div className="bg-gradient-to-r from-red-600 via-primary to-amber-500 rounded-3xl p-8 sm:p-12 text-white shadow-lg relative overflow-hidden">
+      <div className="liquid-glass-red rounded-3xl p-8 sm:p-12 text-white shadow-lg relative overflow-hidden">
         <div className="relative z-10 grid items-center gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(300px,0.85fr)]">
           <div className="max-w-xl">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/20 rounded-full text-xs font-bold text-yellow-300 uppercase tracking-wider mb-3">
