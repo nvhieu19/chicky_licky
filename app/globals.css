@@ -122,7 +122,8 @@ body {
 }
 
 .banner-marquee-track {
-  animation: banner-marquee 20s linear infinite;
+  animation: banner-marquee 16s linear infinite;
+  will-change: transform;
 }
 
 .banner-image-shine::after {
@@ -149,8 +150,18 @@ body {
 }
 
 @keyframes banner-marquee {
+  from {
+    transform: translateX(0);
+  }
+
   to {
     transform: translateX(-50%);
+  }
+}
+
+@media (min-width: 640px) {
+  .banner-marquee-track {
+    animation-duration: 22s;
   }
 }
 
@@ -168,6 +179,12 @@ body {
     width: 100%;
     justify-content: center;
     animation: none;
+    will-change: auto;
+  }
+
+  .banner-marquee-track > span:first-child {
+    white-space: normal;
+    text-align: center;
   }
 
   .banner-marquee-track > span[aria-hidden="true"] {

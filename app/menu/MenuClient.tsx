@@ -195,7 +195,7 @@ export default function MenuClient({
         </div>
         <div className="relative z-10 mt-6 overflow-hidden border-y border-white/20 py-2.5">
           <div className="banner-marquee-track flex w-max whitespace-nowrap">
-            <span className="px-5 text-[10px] font-black uppercase tracking-[0.2em] text-amber-200 sm:text-xs">
+            <span className="shrink-0 px-5 text-[10px] font-black uppercase tracking-[0.2em] text-amber-200 sm:text-xs">
               GÀ RÁN GIÒN RỤM <span className="px-3 text-white/60">✦</span>
               COMBO SIÊU HỜI <span className="px-3 text-white/60">✦</span>
               MÓN NGON MỖI NGÀY <span className="px-3 text-white/60">✦</span>
@@ -203,7 +203,7 @@ export default function MenuClient({
             </span>
             <span
               aria-hidden="true"
-              className="px-5 text-[10px] font-black uppercase tracking-[0.2em] text-amber-200 sm:text-xs"
+              className="shrink-0 px-5 text-[10px] font-black uppercase tracking-[0.2em] text-amber-200 sm:text-xs"
             >
               GÀ RÁN GIÒN RỤM <span className="px-3 text-white/60">✦</span>
               COMBO SIÊU HỜI <span className="px-3 text-white/60">✦</span>
