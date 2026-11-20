@@ -64,7 +64,7 @@ export default function MenuClient({
   const [quickViewQuantity, setQuickViewQuantity] = useState(1);
   const [quickViewAdded, setQuickViewAdded] = useState(false);
   const [cartToast, setCartToast] = useState("");
-  const { addToCart, totalItems, subtotal } = useCart();
+  const { addToCart, items, totalItems, subtotal } = useCart();
   const heroProduct = initialProducts.find((product) => product.isBestSeller) ?? initialProducts[0];
 
   // Filter & Sort Logic
@@ -507,19 +507,45 @@ export default function MenuClient({
       </div>
     )}
     {totalItems > 0 && (
-      <Link href="/cart" className="menu-cart-summary liquid-glass group" aria-label={`Xem giỏ hàng, ${totalItems} món, ${formatPrice(subtotal)}`}>
-        <span className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary text-white shadow-md shadow-red-200/50">
-          <ShoppingBag className="h-5 w-5" />
-          <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full border-2 border-white bg-secondary px-1 text-[10px] font-black text-gray-900">
-            {totalItems > 99 ? "99+" : totalItems}
+      <Link
+        href="/cart"
+        className="menu-cart-summary liquid-glass group"
+        aria-label={`Xem giỏ hàng, ${totalItems} món, ${formatPrice(subtotal)}`}
+      >
+        <span className="flex items-center gap-3">
+          <span className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary text-white shadow-md shadow-red-200/50">
+            <ShoppingBag className="h-5 w-5" />
+            <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full border-2 border-white bg-secondary px-1 text-[10px] font-black text-gray-900">
+              {totalItems > 99 ? "99+" : totalItems}
+            </span>
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block text-[10px] font-bold uppercase tracking-wider text-gray-500">
+              Giỏ hàng • {totalItems} món
+            </span>
+            <span className="mt-0.5 block text-sm font-black text-gray-900">
+              {formatPrice(subtotal)}
+            </span>
           </span>
         </span>
-        <span className="min-w-0 flex-1">
-          <span className="block text-[10px] font-bold uppercase tracking-wider text-gray-500">Giỏ hàng • {totalItems} món</span>
-          <span className="mt-0.5 block text-sm font-black text-gray-900">{formatPrice(subtotal)}</span>
+        <span className="menu-cart-items" aria-label="Các món đã chọn">
+          {items.map((item) => (
+            <span key={item.product.id} className="menu-cart-item">
+              <span className="min-w-0 flex-1 truncate font-bold text-gray-800" title={item.product.name}>
+                {item.product.name}
+              </span>
+              <span className="shrink-0 text-gray-500">×{item.quantity}</span>
+              <span className="shrink-0 font-bold text-gray-900">
+                {formatPrice((item.product.salePrice ?? item.product.price) * item.quantity)}
+              </span>
+            </span>
+          ))}
         </span>
-        <span className="inline-flex min-h-11 items-center gap-1 rounded-xl bg-primary px-4 text-xs font-black text-white transition-colors group-hover:bg-primary-hover">
-          Xem giỏ <ChevronDown className="h-4 w-4 -rotate-90" />
+        <span className="flex items-center justify-between border-t border-white/60 pt-2">
+          <span className="text-[10px] font-bold text-gray-500">Tạm tính</span>
+          <span className="inline-flex min-h-9 items-center gap-1 rounded-xl bg-primary px-3 text-xs font-black text-white transition-colors group-hover:bg-primary-hover">
+            Xem giỏ <ChevronDown className="h-4 w-4 -rotate-90" />
+          </span>
         </span>
       </Link>
     )}

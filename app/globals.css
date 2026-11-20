@@ -305,18 +305,47 @@ body {
 
 .menu-cart-summary {
   position: fixed;
-  right: 12px;
-  bottom: max(12px, env(safe-area-inset-bottom));
   left: 12px;
+  bottom: max(12px, env(safe-area-inset-bottom));
   z-index: 42;
   display: flex;
-  min-height: 68px;
-  align-items: center;
-  gap: 12px;
-  padding: 8px 10px;
-  border-radius: 22px;
+  width: min(300px, calc(100vw - 24px));
+  max-height: min(56dvh, 420px);
+  flex-direction: column;
+  gap: 10px;
+  overflow: hidden;
+  padding: 12px;
+  border-radius: 20px;
   box-shadow: 0 14px 40px rgb(38 25 29 / 18%), inset 0 1px 0 rgb(255 255 255 / 96%);
   animation: lucky-wheel-float-in 260ms cubic-bezier(.2,.8,.2,1) both;
+}
+
+.menu-cart-items {
+  display: grid;
+  max-height: min(30dvh, 220px);
+  gap: 4px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 2px;
+}
+
+.menu-cart-item {
+  display: flex;
+  min-height: 32px;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 10px;
+  background: rgb(255 255 255 / 48%);
+  font-size: 11px;
+}
+
+@media (min-width: 640px) {
+  .menu-cart-summary {
+    left: 20px;
+    bottom: 20px;
+    width: min(320px, calc(100vw - 40px));
+  }
 }
 
 .menu-cart-toast {
