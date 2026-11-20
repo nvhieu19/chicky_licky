@@ -70,6 +70,25 @@ export default async function PromotionsPage() {
             Cập nhật liên tục các deal hot, combo giảm giá và quà tặng bất ngờ từ Chicky Licky.
           </p>
         </div>
+        <div className="relative z-10 mt-6 overflow-hidden border-y border-white/20 py-2.5">
+          <div className="banner-marquee-track flex w-max whitespace-nowrap">
+            <span className="shrink-0 px-5 text-[10px] font-black uppercase tracking-[0.2em] text-amber-200 sm:text-xs">
+              ƯU ĐÃI HOT <span className="px-3 text-white/70">✦</span>
+              COMBO SIÊU HỜI <span className="px-3 text-white/70">✦</span>
+              QUÀ TẶNG BẤT NGỜ <span className="px-3 text-white/70">✦</span>
+              CHICKY LICKY
+            </span>
+            <span
+              aria-hidden="true"
+              className="shrink-0 px-5 text-[10px] font-black uppercase tracking-[0.2em] text-amber-200 sm:text-xs"
+            >
+              ƯU ĐÃI HOT <span className="px-3 text-white/70">✦</span>
+              COMBO SIÊU HỜI <span className="px-3 text-white/70">✦</span>
+              QUÀ TẶNG BẤT NGỜ <span className="px-3 text-white/70">✦</span>
+              CHICKY LICKY
+            </span>
+          </div>
+        </div>
       </div>
 
       {/* Promotions list */}

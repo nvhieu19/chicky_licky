@@ -316,8 +316,27 @@ body {
   overflow: hidden;
   padding: 12px;
   border-radius: 20px;
+  background: linear-gradient(
+    115deg,
+    rgb(230 0 40 / 34%) 0%,
+    rgb(255 255 255 / 22%) 48%,
+    rgb(255 176 0 / 38%) 100%
+  );
+  background-size: 200% 200%;
   box-shadow: 0 14px 40px rgb(38 25 29 / 18%), inset 0 1px 0 rgb(255 255 255 / 96%);
-  animation: lucky-wheel-float-in 260ms cubic-bezier(.2,.8,.2,1) both;
+  animation:
+    lucky-wheel-float-in 260ms cubic-bezier(.2,.8,.2,1) both,
+    menu-cart-gradient 8s ease-in-out infinite alternate;
+}
+
+@keyframes menu-cart-gradient {
+  from {
+    background-position: 0% 50%;
+  }
+
+  to {
+    background-position: 100% 50%;
+  }
 }
 
 .menu-cart-items {
