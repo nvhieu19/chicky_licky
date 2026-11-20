@@ -294,7 +294,7 @@ export default function LuckyWheelWidget() {
     let startAngle = 0;
     const visibleSegments = animationSegments ?? segments;
     return (
-      <div className="lucky-wheel-frame">
+      <div className={`lucky-wheel-frame ${spinning ? "lucky-wheel-frame-spinning" : ""}`}>
         <div className="lucky-wheel-pointer" aria-hidden="true" />
         <svg
           viewBox="0 0 360 360"
@@ -464,7 +464,7 @@ export default function LuckyWheelWidget() {
               </div>
             ) : (
               <>
-                <div className="lucky-wheel-stage">
+                <div className={`lucky-wheel-stage ${spinning ? "lucky-wheel-stage-spinning" : ""}`}>
                   {renderWheel()}
                   <div className="lucky-wheel-ornament" aria-hidden="true">
                     <Sparkles />
@@ -472,10 +472,17 @@ export default function LuckyWheelWidget() {
                 </div>
 
                 {result ? (
-                  <div className="lucky-wheel-result">
+                  <div
+                    className={`lucky-wheel-result ${
+                      result.resultType === "NO_PRIZE"
+                        ? "lucky-wheel-result-miss"
+                        : "lucky-wheel-result-win"
+                    }`}
+                    aria-live="polite"
+                  >
                     {result.resultType !== "NO_PRIZE" && (
                       <div className="lucky-wheel-confetti" aria-hidden="true">
-                        {Array.from({ length: 18 }, (_, index) => (
+                        {Array.from({ length: 28 }, (_, index) => (
                           <i
                             key={index}
                             style={{
