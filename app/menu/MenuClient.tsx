@@ -222,7 +222,7 @@ export default function MenuClient({
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-[205px_minmax(0,1fr)] lg:gap-7">
         {/* 2. Category navigation */}
         <aside className="sticky top-[9rem] z-30 -mx-4 min-w-0 px-4 lg:top-32 lg:mx-0 lg:self-start lg:px-0">
-          <div className="liquid-glass rounded-2xl p-2.5 sm:p-3 lg:p-4">
+          <div className="liquid-glass menu-gradient-glass rounded-2xl p-2.5 sm:p-3 lg:p-4">
             <h2 className="mb-3 hidden px-2 text-[11px] font-black uppercase tracking-[0.16em] text-gray-400 lg:block">
               Danh mục món
             </h2>
@@ -251,7 +251,7 @@ export default function MenuClient({
 
         <section className="min-w-0 space-y-5">
           {/* 3. Search & filter bar */}
-          <div className="liquid-glass rounded-2xl p-4 sm:p-5">
+          <div className="liquid-glass menu-gradient-glass rounded-2xl p-4 sm:p-5">
             <div className="flex flex-col gap-4">
               <div className="relative w-full">
                 <input

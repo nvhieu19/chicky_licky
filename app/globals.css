@@ -61,6 +61,15 @@ body {
     inset 0 1px 0 rgb(255 255 255 / 78%);
 }
 
+.menu-gradient-glass {
+  background: linear-gradient(
+    115deg,
+    rgb(230 0 40 / 36%) 0%,
+    rgb(255 255 255 / 24%) 48%,
+    rgb(255 176 0 / 40%) 100%
+  );
+}
+
 .liquid-glass-interactive {
   transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
 }
